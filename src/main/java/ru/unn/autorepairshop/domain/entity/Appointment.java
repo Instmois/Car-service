@@ -21,7 +21,7 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "schedule_id")
+    @Column(name = "appointment_id")
     private Long id;
 
     @Column(name = "status")
@@ -54,7 +54,7 @@ public class Appointment {
             nullable = false,
             updatable = false
     )
-    private User vehicleId;
+    private Vehicle vehicle;
 
     @OneToMany(
             mappedBy = "appointment",
@@ -64,5 +64,12 @@ public class Appointment {
     )
     @ToString.Exclude
     private List<Service> services;
+
+    @OneToOne(
+            mappedBy = "appointment",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
+    @JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id")
+    private Schedule schedule;
 
 }

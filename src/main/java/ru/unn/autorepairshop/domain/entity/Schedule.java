@@ -33,16 +33,14 @@ public class Schedule {
             fetch = FetchType.LAZY
     )
     @JoinColumn(
-            name = "client_id",
+            name = "manager_id",
             nullable = false,
             updatable = false
     )
     private User client;
 
-    @OneToOne(
-            mappedBy = "schedule",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-    )
+    @OneToOne()
+    @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id")
     private Appointment appointment;
 
 }
