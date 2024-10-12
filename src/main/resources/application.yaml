@@ -21,3 +21,12 @@ spring:
           order_updates: true
           batch_versioned_data: true
         generate_statistics: true
+
+security:
+  jwt:
+    access:
+      secret: ${JWT_ACCESS_SECRET}
+      time: 5
+    refresh:
+      secret: ${JWT_REFRESH_SECRET}
+      time: 30
