@@ -15,6 +15,9 @@ java {
 
 ext {
     jjwtVersion = '0.11.5'
+    jacartaValidationVersion = '3.0.2'
+    hibernateValidatorVersion = '8.0.0.Final'
+    mapstructVersion = '1.5.5.Final'
 }
 
 configurations {
@@ -39,6 +42,12 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation "jakarta.validation:jakarta.validation-api:$jacartaValidationVersion"
+    implementation "org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion"
+
+    implementation "org.mapstruct:mapstruct:$mapstructVersion"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
 
     implementation "io.jsonwebtoken:jjwt-api:$jjwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jjwtVersion"

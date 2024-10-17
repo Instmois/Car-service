@@ -1,12 +1,18 @@
 package ru.unn.autorepairshop.security.dto;
 
-public record JwtResponse(
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-        String email,
+@Data
+@Builder
+@AllArgsConstructor
+public class JwtResponse {
 
-        String accessToken,
+    private String email;
 
-        String refreshToken
+    private String accessToken;
 
-) {
+    private String refreshToken;
+
 }

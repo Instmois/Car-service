@@ -96,6 +96,16 @@ public class JwtCore {
         return false;
     }
 
+    public String getId(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(refreshKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("id").toString();
+    }
+
     private Claims getClaims(String token, Key secret) {
         return Jwts.parserBuilder()
                 .setSigningKey(secret)
