@@ -18,6 +18,7 @@ ext {
     jacartaValidationVersion = '3.0.2'
     hibernateValidatorVersion = '8.0.0.Final'
     mapstructVersion = '1.5.5.Final'
+    openapiVersion = '2.2.0'
 }
 
 configurations {
@@ -48,6 +49,8 @@ dependencies {
 
     implementation "org.mapstruct:mapstruct:$mapstructVersion"
     annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$openapiVersion"
 
     implementation "io.jsonwebtoken:jjwt-api:$jjwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jjwtVersion"

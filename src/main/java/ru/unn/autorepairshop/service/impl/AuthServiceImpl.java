@@ -33,10 +33,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponse login(JwtRequest loginRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
 
-        final User user = userService.getByEmail(loginRequest.email());
+        final User user = userService.getByEmail(loginRequest.getEmail());
 
         return createJwtResponse(user);
     }
