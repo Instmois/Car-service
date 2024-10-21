@@ -15,10 +15,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class AppointmentRequestValidator {
+public class AppointmentRequestValidator extends AppointmentRequestValidatorTemplate {
 
     private final UserService userService;
-
     private final ServiceService serviceService;
 
     @Autowired
@@ -27,27 +26,39 @@ public class AppointmentRequestValidator {
         this.serviceService = serviceService;
     }
 
-    public void validate(AppointmentCreateRequestDto request, String email) {
+    @Override
+    protected void validateUserOwnership(AppointmentCreateRequestDto request, String email) {
         Set<User> users = new HashSet<>(userService.getAllByVehicleLicencePlate(request.licensePlate()));
         User user = userService.getByEmail(email);
+
+        if (!users.contains(user) && users.size() == 1) {
+            throwValidationError(AppointmentException.CODE.CAR_IS_ALREADY_OCCUPIED);
+        }
+    }
+
+    @Override
+    protected void validateUniqueServiceTypes(AppointmentCreateRequestDto request) {
         Set<ServiceType> uniqueTypes = new HashSet<>(request.serviceTypes());
+
+        if (uniqueTypes.size() != request.serviceTypes().size()) {
+            throwValidationError(AppointmentException.CODE.REPETITION_OF_SERVICE_TYPES);
+        }
+    }
+
+    @Override
+    protected void validateNoSimilarWorksExist(AppointmentCreateRequestDto request) {
         Set<Service> servicesByLicencePlate = new HashSet<>(serviceService.findAllByVehicleLicensePlate(request.licensePlate()));
         Set<ServiceType> existingTypes = servicesByLicencePlate
-                .stream().map(Service::getServiceType).collect(Collectors.toSet());
+                .stream()
+                .map(Service::getServiceType)
+                .collect(Collectors.toSet());
+
+        Set<ServiceType> uniqueTypes = new HashSet<>(request.serviceTypes());
         Set<ServiceType> intersection = new HashSet<>(uniqueTypes);
         intersection.retainAll(existingTypes);
 
-        if (!users.contains(user) && users.size() == 1) {
-            throw AppointmentException.CODE.CAR_IS_ALREADY_OCCUPIED.get();
-        }
-
-        if (uniqueTypes.size() != request.serviceTypes().size()) {
-            throw AppointmentException.CODE.REPETITION_OF_SERVICE_TYPES.get();
-        }
-
         if (!intersection.isEmpty()) {
-            throw AppointmentException.CODE.SIMILAR_WORKS_EXIST.get();
+            throwValidationError(AppointmentException.CODE.SIMILAR_WORKS_EXIST);
         }
-
     }
 }

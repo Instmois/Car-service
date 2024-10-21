@@ -4,15 +4,15 @@ import org.springframework.stereotype.Component;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
 import ru.unn.autorepairshop.service.ClientService;
-import ru.unn.autorepairshop.validator.AppointmentRequestValidator;
+import ru.unn.autorepairshop.validator.AppointmentRequestValidatorTemplate;
 
 @Component
 public class AppointmentFacade {
 
-    private final AppointmentRequestValidator validator;
+    private final AppointmentRequestValidatorTemplate validator;
     private final ClientService clientService;
 
-    public AppointmentFacade(AppointmentRequestValidator validator, ClientService clientService) {
+    public AppointmentFacade(AppointmentRequestValidatorTemplate validator, ClientService clientService) {
         this.validator = validator;
         this.clientService = clientService;
     }

@@ -11,7 +11,6 @@ import ru.unn.autorepairshop.domain.entity.Vehicle;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.enums.ServiceStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentCreatedResponseDtoMapper;
-import ru.unn.autorepairshop.repository.VehicleRepository;
 import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ClientService;
 import ru.unn.autorepairshop.service.ServiceService;
