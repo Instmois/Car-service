@@ -19,7 +19,7 @@ import ru.unn.autorepairshop.service.UserService;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getById(Long id) {
         return userRepository
                 .findById(id)
@@ -51,6 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getByEmail(String email) {
         return userRepository
                 .findByAuthData_Email(email)
@@ -58,7 +60,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserCreatedResponseDto create(UserCreateRequestDto request) {
         User user = userCreateRequestDtoMapper.toEntity(request);
         AuthData authData = new AuthData();
@@ -83,6 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAllByVehicleLicencePlate(String licensePlate) {
         return userRepository.findAllByVehicleLicencePlate(licensePlate);
     }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.request.JwtRefreshRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.UserCreateRequestDto;
 import ru.unn.autorepairshop.domain.entity.User;
@@ -15,6 +16,7 @@ import ru.unn.autorepairshop.service.AuthService;
 import ru.unn.autorepairshop.service.UserService;
 
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
