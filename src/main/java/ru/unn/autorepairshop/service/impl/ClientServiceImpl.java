@@ -41,8 +41,7 @@ public class ClientServiceImpl implements ClientService {
             VehicleService vehicleService,
             AppointmentService appointmentService,
             ServiceService serviceService,
-            AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper,
-            VehicleRepository vehicleRepository) {
+            AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper) {
         this.userService = userService;
         this.vehicleService = vehicleService;
         this.appointmentService = appointmentService;
@@ -55,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
         User user = userService.getByEmail(email);
 
         if(vehicleService.getOptionalByLicensePlate(request.licensePlate()).isPresent()) {
-            System.out.println(request.licensePlate().toString());
+            System.out.println(request.licensePlate());
         }
 
         Vehicle vehicle = vehicleService

@@ -1,6 +1,5 @@
 package ru.unn.autorepairshop.service;
 
-import org.springframework.data.repository.query.Param;
 import ru.unn.autorepairshop.domain.entity.Service;
 
 import java.util.List;

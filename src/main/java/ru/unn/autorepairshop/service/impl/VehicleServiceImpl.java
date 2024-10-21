@@ -8,7 +8,6 @@ import ru.unn.autorepairshop.exceptions.VehicleException;
 import ru.unn.autorepairshop.repository.VehicleRepository;
 import ru.unn.autorepairshop.service.VehicleService;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

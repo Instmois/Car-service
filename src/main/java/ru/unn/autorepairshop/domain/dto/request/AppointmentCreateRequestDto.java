@@ -13,8 +13,7 @@ public record AppointmentCreateRequestDto(
 
         @Schema(
                 description = "License plate of the vehicle.",
-                example = "A000AA",
-                required = true
+                example = "A000AA"
         )
         @NotNull(message = "License plate cannot be null.")
         @NotEmpty(message = "License plate must not be empty.")
@@ -23,8 +22,7 @@ public record AppointmentCreateRequestDto(
 
         @Schema(
                 description = "Model of the vehicle.",
-                example = "Toyota Camry",
-                required = true
+                example = "Toyota Camry"
         )
         @NotNull(message = "Model cannot be null.")
         @NotEmpty(message = "Model must not be empty.")
@@ -33,8 +31,7 @@ public record AppointmentCreateRequestDto(
         //todo переписать example
         @Schema(
                 description = "List of service types to be performed.",
-                example = "[\"OIL_CHANGE\", \"BRAKE_INSPECTION\"]",
-                required = true
+                example = "[\"OIL_CHANGE\", \"BRAKE_INSPECTION\"]"
         )
         @NotNull(message = "Service types cannot be null.")
         @Size(min = 1, message = "At least one service type must be specified.")
