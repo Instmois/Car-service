@@ -6,9 +6,10 @@ import org.mapstruct.Mappings;
 import ru.unn.autorepairshop.domain.dto.response.UserCreatedResponseDto;
 import ru.unn.autorepairshop.domain.entity.User;
 import ru.unn.autorepairshop.domain.mapper.EntityRequestMapper;
+import ru.unn.autorepairshop.domain.mapper.EntityResponseMapper;
 
 @Mapper(componentModel = "spring")
-public interface UserCreateResponseDtoMapper extends EntityRequestMapper<UserCreatedResponseDto, User> {
+public interface UserCreateResponseDtoMapper extends EntityResponseMapper<UserCreatedResponseDto, User> {
 
     @Override
     @Mappings({

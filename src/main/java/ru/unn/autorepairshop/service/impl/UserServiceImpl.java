@@ -16,6 +16,8 @@ import ru.unn.autorepairshop.exceptions.UserException;
 import ru.unn.autorepairshop.repository.UserRepository;
 import ru.unn.autorepairshop.service.UserService;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService {
         }
 
         authData.setPassword(passwordEncoder.encode(request.password()));
-        authData.setRole(Role.CLIENT);
+        authData.setRole(Role.ROLE_CLIENT);
         authData.setEmail(request.email());
         authData.setUser(user);
         user.setAuthData(authData);
@@ -78,6 +80,11 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return userCreateResponseDtoMapper.toDto(user);
+    }
+
+    @Override
+    public List<User> getAllByVehicleLicencePlate(String licensePlate) {
+        return userRepository.findAllByVehicleLicencePlate(licensePlate);
     }
 
 }

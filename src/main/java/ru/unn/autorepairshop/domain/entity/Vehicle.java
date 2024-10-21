@@ -20,10 +20,10 @@ public class Vehicle {
     @Column(name = "vehicle_id")
     private Long id;
 
-    @Column(name = "license_plate")
+    @Column(name = "license_plate", unique = true, nullable = false)
     private String licensePlate;
 
-    @Column(name = "model")
+    @Column(name = "model", nullable = false)
     private String model;
 
     @ManyToOne(

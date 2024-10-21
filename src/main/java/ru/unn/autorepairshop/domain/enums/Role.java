@@ -2,10 +2,10 @@ package ru.unn.autorepairshop.domain.enums;
 
 public enum Role {
 
-    CLIENT,
+    ROLE_CLIENT,
 
-    MANAGER,
+    ROLE_MANAGER,
 
-    ADMIN
+    ROLE_ADMIN
 
 }
