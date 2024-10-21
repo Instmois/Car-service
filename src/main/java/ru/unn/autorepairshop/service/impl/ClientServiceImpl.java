@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
 import ru.unn.autorepairshop.domain.entity.Service;
 import ru.unn.autorepairshop.domain.entity.User;
 import ru.unn.autorepairshop.domain.entity.Vehicle;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.enums.ServiceStatus;
+import ru.unn.autorepairshop.domain.mapper.ClientInfoResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentCreatedResponseDtoMapper;
 import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ClientService;
@@ -34,18 +36,23 @@ public class ClientServiceImpl implements ClientService {
 
     private final AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper;
 
+    private final ClientInfoResponseDtoMapper clientInfoResponseDtoMapper;
+
     @Autowired
     public ClientServiceImpl(
             UserService userService,
             VehicleService vehicleService,
             AppointmentService appointmentService,
             ServiceService serviceService,
-            AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper) {
+            AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper,
+            ClientInfoResponseDtoMapper clientInfoResponseDtoMapper
+    ) {
         this.userService = userService;
         this.vehicleService = vehicleService;
         this.appointmentService = appointmentService;
         this.serviceService = serviceService;
         this.appointmentCreatedResponseDtoMapper = appointmentCreatedResponseDtoMapper;
+        this.clientInfoResponseDtoMapper = clientInfoResponseDtoMapper;
     }
 
     @Override
@@ -81,6 +88,14 @@ public class ClientServiceImpl implements ClientService {
         appointmentService.save(appointment);
 
         return appointmentCreatedResponseDtoMapper.toDto(appointment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ClientInfoResponseDto getInfoAboutCurrentUser(String email) {
+        User user = userService.getByEmail(email);
+
+        return clientInfoResponseDtoMapper.toDto(user);
     }
 
 
