@@ -10,7 +10,9 @@ public class UserException extends RuntimeException {
 
         NO_SUCH_USER_ID("Нет пользователя с таким id"),
 
-        NO_SUCH_USER_EMAIL("Нет пользователя с таким email");
+        NO_SUCH_USER_EMAIL("Нет пользователя с таким email"),
+
+        EMAIL_IN_USE("Такой email уже используется");
 
         final String codeDescription;
 

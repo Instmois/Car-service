@@ -5,6 +5,7 @@ import ru.unn.autorepairshop.domain.dto.response.UserCreatedResponseDto;
 import ru.unn.autorepairshop.domain.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -16,4 +17,7 @@ public interface UserService {
 
     List<User> getAllByVehicleLicencePlate(String licensePlate);
 
+    User save(User user);
+
+    Optional<User> getOptionalByEmail(String email);
 }

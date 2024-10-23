@@ -17,6 +17,7 @@ import ru.unn.autorepairshop.repository.UserRepository;
 import ru.unn.autorepairshop.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -87,6 +88,16 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<User> getAllByVehicleLicencePlate(String licensePlate) {
         return userRepository.findAllByVehicleLicencePlate(licensePlate);
+    }
+
+    @Override
+    public Optional<User> getOptionalByEmail(String email) {
+        return userRepository.findByAuthData_Email(email);
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
 }
