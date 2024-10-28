@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -26,6 +27,7 @@ import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.enums.ServiceType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -79,7 +81,16 @@ public class Appointment {
             mappedBy = "appointment",
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
     )
-    @JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
+    @OneToMany(
+            mappedBy = "appointment",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @ToString.Exclude
+    private List<PartOrder> partOrders;
 
 }

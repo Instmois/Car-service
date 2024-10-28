@@ -1,9 +1,24 @@
 package ru.unn.autorepairshop.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -22,11 +37,15 @@ public class Schedule {
     @Column(name = "schedule_id")
     private Long id;
 
-    @Column()
+    @Column(name = "start_date")
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime scheduleDate;
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date")
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime endDate;
 
     @ManyToOne(
             optional = false,
@@ -42,5 +61,16 @@ public class Schedule {
     @OneToOne()
     @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id")
     private Appointment appointment;
+
+    @ManyToOne(
+            optional = false,
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(
+            name = "mechanic_id",
+            nullable = false,
+            updatable = false
+    )
+    private Mechanic mechanic;
 
 }

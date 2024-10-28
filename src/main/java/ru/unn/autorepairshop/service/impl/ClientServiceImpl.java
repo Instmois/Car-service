@@ -1,10 +1,13 @@
 package ru.unn.autorepairshop.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
@@ -132,6 +135,11 @@ public class ClientServiceImpl implements ClientService {
         Optional.ofNullable(request.phoneNumber()).ifPresent(user::setPhoneNumber);
 
         return clientInfoUpdateResponseDtoMapper.toDto(userService.save(user));
+    }
+
+    @Override
+    public Page<AppointmentResponseDto> getAllAppointments(PageRequest of, String email) {
+        return null;
     }
 
     /**
