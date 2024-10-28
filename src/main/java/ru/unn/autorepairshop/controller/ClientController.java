@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.unn.autorepairshop.controller.api.ClientApi;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
-import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
 import ru.unn.autorepairshop.facade.AppointmentFacade;
 import ru.unn.autorepairshop.service.ClientService;
 
@@ -55,13 +54,9 @@ public class ClientController implements ClientApi {
     @PutMapping("/current")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     public ResponseEntity<?> updateCurrentClient(Principal principal, @Validated ClientInfoUpdateRequestDto request) {
-        System.out.println("-----------------------------------------------");
-        System.out.println(request);
-        System.out.println("-----------------------------------------------");
-        ClientInfoUpdateResponseDto response = clientService.updateInfoAboutCurrentUser(request, principal.getName());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(response);
+                .body(clientService.updateInfoAboutCurrentUser(request, principal.getName()));
     }
 
 }

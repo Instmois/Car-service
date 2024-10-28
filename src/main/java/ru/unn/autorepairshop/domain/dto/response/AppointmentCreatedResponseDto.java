@@ -2,6 +2,7 @@ package ru.unn.autorepairshop.domain.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
+import ru.unn.autorepairshop.domain.enums.ServiceType;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +19,10 @@ public record AppointmentCreatedResponseDto(
         AppointmentStatus status,
 
         @Schema(description = "Время формировании заявки")
-        LocalDateTime appointmentDate
+        LocalDateTime appointmentDate,
+
+        @Schema(description = "Вид услуги")
+        ServiceType serviceType
 
 ) {
 }

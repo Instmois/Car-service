@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import ru.unn.autorepairshop.domain.enums.ServiceType;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Schema(description = "Request DTO for creating an appointment, containing vehicle details and requested services.")
 public record AppointmentCreateRequestDto(
@@ -38,14 +37,12 @@ public record AppointmentCreateRequestDto(
         @Future(message = "Appointment date must be in the future.")
         LocalDateTime appointmentDate,
 
-        //todo переписать example
         @Schema(
-                description = "List of service types to be performed.",
-                example = "[\"OIL_CHANGE\", \"BRAKE_INSPECTION\"]"
+                description = "Service type to be performed.",
+                example = "REPAIR"
         )
-        @NotNull(message = "Service types cannot be null.")
-        @Size(min = 1, message = "At least one service type must be specified.")
-        List<ServiceType> serviceTypes
+        @NotNull(message = "Service type cannot be null.")
+        ServiceType serviceType
 
 ) {
 }

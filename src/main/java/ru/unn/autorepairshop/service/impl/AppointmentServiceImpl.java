@@ -7,6 +7,8 @@ import ru.unn.autorepairshop.domain.entity.Appointment;
 import ru.unn.autorepairshop.repository.AppointmentRepository;
 import ru.unn.autorepairshop.service.AppointmentService;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class AppointmentServiceImpl implements AppointmentService {
@@ -21,6 +23,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment save(Appointment appointment) {
         return appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<Appointment> findAllByLicencePlate(String licencePlate) {
+        return appointmentRepository.findAllByVehicle_LicensePlate(licencePlate);
     }
 
 }

@@ -7,13 +7,11 @@ public abstract class AppointmentRequestValidatorTemplate {
 
     public final void validate(AppointmentCreateRequestDto request, String email) {
         validateUserOwnership(request, email);
-        validateUniqueServiceTypes(request);
         validateNoSimilarWorksExist(request);
     }
 
     protected abstract void validateUserOwnership(AppointmentCreateRequestDto request, String email);
 
-    protected abstract void validateUniqueServiceTypes(AppointmentCreateRequestDto request);
 
     protected abstract void validateNoSimilarWorksExist(AppointmentCreateRequestDto request);
 

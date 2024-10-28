@@ -15,7 +15,8 @@ public interface AppointmentCreatedResponseDtoMapper extends EntityResponseMappe
             @Mapping(source = "vehicle.licensePlate", target = "licencePlate"),
             @Mapping(source = "vehicle.model", target = "model"),
             @Mapping(source = "status", target = "status"),
-            @Mapping(source = "appointmentDate", target = "appointmentDate")
+            @Mapping(source = "appointmentDate", target = "appointmentDate"),
+            @Mapping(source = "serviceType", target = "serviceType")
     })
     AppointmentCreatedResponseDto toDto(Appointment entity);
 
