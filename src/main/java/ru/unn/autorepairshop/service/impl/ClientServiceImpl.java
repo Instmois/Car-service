@@ -69,18 +69,6 @@ public class ClientServiceImpl implements ClientService {
         this.clientInfoUpdateResponseDtoMapper = clientInfoUpdateResponseDtoMapper;
     }
 
-    /**
-     * Метод для создания новой заявки на выполнение услуги.
-     * <p>
-     * Метод создает заявку для указанного пользователя на основе данных из запроса.
-     * Если указанного автомобиля у пользователя нет, метод создает новый автомобиль на основе данных запроса.
-     * </p>
-     *
-     * @param request объект {@link AppointmentCreateRequestDto}, содержащий информацию о создаваемой заявке,
-     *                включая тип услуги, дату и номерной знак автомобиля.
-     * @param email   адрес электронной почты текущего пользователя, для которого создается заявка.
-     * @return объект {@link AppointmentCreatedResponseDto}, представляющий данные созданной заявки.
-     */
     @Override
     public AppointmentCreatedResponseDto createAppointment(AppointmentCreateRequestDto request, String email) {
         User user = userService.getByEmail(email);
@@ -102,15 +90,6 @@ public class ClientServiceImpl implements ClientService {
         return appointmentCreatedResponseDtoMapper.toDto(appointment);
     }
 
-    /**
-     * Метод для получения информации о текущем пользователе.
-     * <p>
-     * Выполняет поиск пользователя по email и возвращает данные о нем.
-     * </p>
-     *
-     * @param email адрес электронной почты текущего пользователя.
-     * @return объект {@link ClientInfoResponseDto}, содержащий информацию о пользователе.
-     */
     @Override
     @Transactional(readOnly = true)
     public ClientInfoResponseDto getInfoAboutCurrentUser(String email) {
@@ -119,18 +98,6 @@ public class ClientServiceImpl implements ClientService {
         return clientInfoResponseDtoMapper.toDto(user);
     }
 
-    /**
-     * Метод для обновления информации о текущем пользователе.
-     * <p>
-     * Обновляет данные пользователя на основе запроса. При попытке смены email
-     * проверяет, что новый email не используется другим пользователем. Обновленные данные сохраняются.
-     * </p>
-     *
-     * @param request объект {@link ClientInfoUpdateRequestDto}, содержащий новые данные пользователя.
-     * @param email   текущий email пользователя для идентификации.
-     * @return объект {@link ClientInfoUpdateResponseDto}, представляющий обновленные данные пользователя.
-     * @throws UserException с кодом {@code EMAIL_IN_USE}, если новый email уже используется другим пользователем.
-     */
     @Override
     public ClientInfoUpdateResponseDto updateInfoAboutCurrentUser(ClientInfoUpdateRequestDto request, String email) {
         User user = userService.getByEmail(email);
