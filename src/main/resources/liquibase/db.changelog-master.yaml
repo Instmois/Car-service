@@ -1,0 +1,6 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/changesets/06-01-changelog.sql
+  - include:
+      file: liquibase/changesets/06-02-changelog.sql
+

@@ -19,6 +19,7 @@ ext {
     hibernateValidatorVersion = '8.0.0.Final'
     mapstructVersion = '1.5.5.Final'
     openapiVersion = '2.2.0'
+    liquibaseVersion = "4.20.0"
 }
 
 configurations {
@@ -51,6 +52,8 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
 
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$openapiVersion"
+
+    implementation "org.liquibase:liquibase-core:$liquibaseVersion"
 
     implementation "io.jsonwebtoken:jjwt-api:$jjwtVersion"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:$jjwtVersion"

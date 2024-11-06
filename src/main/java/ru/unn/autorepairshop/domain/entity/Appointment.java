@@ -36,7 +36,7 @@ import java.util.List;
 @Setter
 @ToString
 @Entity
-@Table(name = "appointments")
+@Table(name = "appointment")
 public class Appointment {
 
     @Id

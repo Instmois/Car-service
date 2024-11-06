@@ -25,7 +25,7 @@ import java.util.List;
 @Setter
 @ToString
 @Entity
-@Table(name = "mechanics")
+@Table(name = "mechanic")
 public class Mechanic {
 
     @Id

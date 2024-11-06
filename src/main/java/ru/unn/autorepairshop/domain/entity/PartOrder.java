@@ -27,7 +27,7 @@ import ru.unn.autorepairshop.domain.enums.PartOrderStatus;
 @Setter
 @ToString
 @Entity
-@Table(name = "part_orders")
+@Table(name = "part_order")
 public class PartOrder {
 
     @Id
