@@ -75,6 +75,8 @@ public class Appointment {
     )
     private Vehicle vehicle;
 
+    @Column(name = "service_type")
+    @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
 
     @OneToOne(

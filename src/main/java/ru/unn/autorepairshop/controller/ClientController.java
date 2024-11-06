@@ -2,7 +2,7 @@ package ru.unn.autorepairshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.unn.autorepairshop.controller.api.ClientApi;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
-import ru.unn.autorepairshop.domain.dto.request.AppointmentGetAllRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.facade.AppointmentFacade;
@@ -41,12 +40,9 @@ public class ClientController implements ClientApi {
 
     @PostMapping("/appointments")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-    public ResponseEntity<?> getAllAppointments(Principal principal, @Validated AppointmentGetAllRequestDto requestDto) {
+    public ResponseEntity<?> getAllAppointments(Principal principal, Pageable pageable) {
         Page<AppointmentResponseDto> response = clientService.getAllAppointments(
-                PageRequest.of(
-                        requestDto.pageNumber(),
-                        requestDto.pageSize()
-                ),
+                pageable,
                 principal.getName()
         );
 

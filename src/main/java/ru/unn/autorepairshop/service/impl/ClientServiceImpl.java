@@ -2,7 +2,7 @@ package ru.unn.autorepairshop.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
@@ -23,6 +23,7 @@ import ru.unn.autorepairshop.service.ClientService;
 import ru.unn.autorepairshop.service.UserService;
 import ru.unn.autorepairshop.service.VehicleService;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @org.springframework.stereotype.Service
@@ -40,6 +41,10 @@ public class ClientServiceImpl implements ClientService {
     private final ClientInfoResponseDtoMapper clientInfoResponseDtoMapper;
 
     private final ClientInfoUpdateResponseDtoMapper clientInfoUpdateResponseDtoMapper;
+
+    private final static String DEFAULT_FIELD_STATUS = "В обработке";
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
 
     @Autowired
     public ClientServiceImpl(
@@ -138,9 +143,39 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Page<AppointmentResponseDto> getAllAppointments(PageRequest of, String email) {
-        return null;
+    @Transactional(readOnly = true)
+    public Page<AppointmentResponseDto> getAllAppointments(Pageable pageRequest, String email) {
+        Page<Appointment> userAppointments = appointmentService.findAllByUser(pageRequest, email);
+        return userAppointments.map(this::mapToDto);
     }
+
+    /**
+     * Преобразует Appointment в AppointmentResponseDto в зависимости от статуса заявки.
+     */
+    private AppointmentResponseDto mapToDto(Appointment appointment) {
+        if (appointment.getStatus() == AppointmentStatus.NEW) {
+            return new AppointmentResponseDto(
+                    DEFAULT_FIELD_STATUS,
+                    DEFAULT_FIELD_STATUS,
+                    appointment.getServiceType(),
+                    appointment.getVehicle().getModel(),
+                    appointment.getVehicle().getLicensePlate(),
+                    DEFAULT_FIELD_STATUS,
+                    appointment.getStatus()
+            );
+        } else {
+            return new AppointmentResponseDto(
+                    appointment.getSchedule().getStartDate().format(DATE_TIME_FORMATTER),
+                    appointment.getSchedule().getEndDate().format(DATE_TIME_FORMATTER),
+                    appointment.getServiceType(),
+                    appointment.getVehicle().getModel(),
+                    appointment.getVehicle().getLicensePlate(),
+                    appointment.getSchedule().getMechanic().getInitials(),
+                    appointment.getStatus()
+            );
+        }
+    }
+
 
     /**
      * Вспомогательный метод для создания нового автомобиля на основе данных запроса.

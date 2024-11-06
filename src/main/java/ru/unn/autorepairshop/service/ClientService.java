@@ -1,7 +1,7 @@
 package ru.unn.autorepairshop.service;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
@@ -17,6 +17,6 @@ public interface ClientService {
 
     ClientInfoUpdateResponseDto updateInfoAboutCurrentUser(ClientInfoUpdateRequestDto request, String email);
 
-    Page<AppointmentResponseDto> getAllAppointments(PageRequest of, String email);
+    Page<AppointmentResponseDto> getAllAppointments(Pageable of, String email);
 
 }

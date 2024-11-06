@@ -3,13 +3,11 @@ package ru.unn.autorepairshop.domain.dto.response;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.enums.ServiceType;
 
-import java.time.LocalDateTime;
-
 public record AppointmentResponseDto(
 
-        LocalDateTime startDate,
+        String startDate,
 
-        LocalDateTime endDate,
+        String endDate,
 
         ServiceType serviceType,
 
