@@ -7,8 +7,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,40 +25,23 @@ import java.util.List;
 @Setter
 @ToString
 @Entity
-@Table(name = "vehicle")
-public class Vehicle {
+@Table(name = "mechanic")
+public class Mechanic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vehicle_id")
+    @Column(name = "mechanic_id")
     private Long id;
 
-    @Column(name = "license_plate", unique = true, nullable = false)
-    private String licensePlate;
+    @Column(name = "initials", nullable = false, length = 255)
+    private String initials;
 
-    @Column(name = "model", nullable = false)
-    private String model;
-
-    @ManyToOne(
-            optional = false,
-            fetch = FetchType.LAZY
-    )
-    @JoinColumn(
-            name = "client_id",
-            nullable = false,
-            updatable = false
-    )
-    private User client;
-
-
-    //todo проверить, как будет работать при удалении
     @OneToMany(
-            mappedBy = "vehicle",
+            mappedBy = "mechanic",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH},
             orphanRemoval = true
     )
     @ToString.Exclude
-    private List<Appointment> appointments;
-
+    private List<Schedule> schedules;
 }

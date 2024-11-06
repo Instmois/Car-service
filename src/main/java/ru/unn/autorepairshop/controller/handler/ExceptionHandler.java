@@ -1,5 +1,6 @@
 package ru.unn.autorepairshop.controller.handler;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -7,15 +8,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import jakarta.validation.ConstraintViolation;
-import org.springframework.validation.FieldError;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import ru.unn.autorepairshop.exceptions.AppointmentException;
 import ru.unn.autorepairshop.exceptions.AuthException;
 import ru.unn.autorepairshop.exceptions.UserException;
+import ru.unn.autorepairshop.exceptions.VehicleException;
 import ru.unn.autorepairshop.exceptions.message.ErrorMessage;
 import ru.unn.autorepairshop.exceptions.message.ValidationErrorMessage;
 import ru.unn.autorepairshop.utils.StringUtil;
@@ -160,6 +162,32 @@ public class ExceptionHandler {
         UserException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_USER_ID, NO_SUCH_USER_EMAIL -> HttpStatus.NOT_FOUND;
+            case EMAIL_IN_USE -> HttpStatus.CONFLICT;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(VehicleException.class)
+    public ResponseEntity<ErrorMessage> handleVehicleException(VehicleException e) {
+        VehicleException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case NO_SUCH_VEHICLE_BY_LICENSE_PLATE -> HttpStatus.NOT_FOUND;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new ErrorMessage(codeStr, e.getMessage()));
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(AppointmentException.class)
+    public ResponseEntity<ErrorMessage> handleAppointmentException(AppointmentException e) {
+        AppointmentException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case REPETITION_OF_SERVICE_TYPES, SIMILAR_WORKS_EXIST -> HttpStatus.BAD_REQUEST;
+            case CAR_IS_ALREADY_OCCUPIED -> FORBIDDEN;
         };
         String codeStr = code.toString();
         return ResponseEntity

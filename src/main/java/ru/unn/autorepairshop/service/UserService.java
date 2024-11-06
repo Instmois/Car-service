@@ -4,6 +4,9 @@ import ru.unn.autorepairshop.domain.dto.request.UserCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.UserCreatedResponseDto;
 import ru.unn.autorepairshop.domain.entity.User;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface UserService {
 
     User getById(Long id);
@@ -12,4 +15,9 @@ public interface UserService {
 
     UserCreatedResponseDto create(UserCreateRequestDto request);
 
+    List<User> getAllByVehicleLicencePlate(String licensePlate);
+
+    User save(User user);
+
+    Optional<User> getOptionalByEmail(String email);
 }

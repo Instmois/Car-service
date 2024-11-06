@@ -20,6 +20,7 @@ public record UserCreateRequestDto(
         String lastName,
 
         @Schema(description = "Отчество", example = "Иванович")
+        @Length(max = 255, message = "Patronymic length must be smaller than 255 symbols")
         String patronymic,
 
         @Pattern(regexp = "^[78]\\d{10}$", message = "Phone number must be 11 digits and start with 7 or 8")

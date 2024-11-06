@@ -2,8 +2,8 @@ package ru.unn.autorepairshop.domain.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "Информация о созданном пользователе")
-public record UserCreatedResponseDto(
+@Schema(description = "Информация о текущем пользователе")
+public record ClientInfoResponseDto(
 
         @Schema(description = "Имя", example = "Иван")
         String firstName,

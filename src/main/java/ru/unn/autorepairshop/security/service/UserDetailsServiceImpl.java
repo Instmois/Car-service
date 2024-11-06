@@ -28,6 +28,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .findByAuthData_Email(username)
                 .orElseThrow(UserException.CODE.NO_SUCH_USER_EMAIL::get);
 
+        System.out.println(new SimpleGrantedAuthority(user.getAuthData().getRole().toString()));
+
         return new org.springframework.security.core.userdetails.User(
                 user.getAuthData().getEmail(),
                 user.getAuthData().getPassword(),

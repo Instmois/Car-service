@@ -16,8 +16,11 @@ import ru.unn.autorepairshop.exceptions.UserException;
 import ru.unn.autorepairshop.repository.UserRepository;
 import ru.unn.autorepairshop.service.UserService;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -42,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getById(Long id) {
         return userRepository
                 .findById(id)
@@ -49,6 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getByEmail(String email) {
         return userRepository
                 .findByAuthData_Email(email)
@@ -56,7 +61,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserCreatedResponseDto create(UserCreateRequestDto request) {
         User user = userCreateRequestDtoMapper.toEntity(request);
         AuthData authData = new AuthData();
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService {
         }
 
         authData.setPassword(passwordEncoder.encode(request.password()));
-        authData.setRole(Role.CLIENT);
+        authData.setRole(Role.ROLE_CLIENT);
         authData.setEmail(request.email());
         authData.setUser(user);
         user.setAuthData(authData);
@@ -78,6 +82,22 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return userCreateResponseDtoMapper.toDto(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> getAllByVehicleLicencePlate(String licensePlate) {
+        return userRepository.findAllByVehicleLicencePlate(licensePlate);
+    }
+
+    @Override
+    public Optional<User> getOptionalByEmail(String email) {
+        return userRepository.findByAuthData_Email(email);
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
 }

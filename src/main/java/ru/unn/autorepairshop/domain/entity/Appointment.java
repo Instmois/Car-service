@@ -1,10 +1,30 @@
 package ru.unn.autorepairshop.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import ru.unn.autorepairshop.domain.enums.ServiceType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +36,7 @@ import java.util.List;
 @Setter
 @ToString
 @Entity
-@Table(name = "appointments")
+@Table(name = "appointment")
 public class Appointment {
 
     @Id
@@ -30,7 +50,6 @@ public class Appointment {
 
     @Column(name = "appointment_date")
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime appointmentDate;
 
@@ -56,6 +75,17 @@ public class Appointment {
     )
     private Vehicle vehicle;
 
+    @Column(name = "service_type")
+    @Enumerated(EnumType.STRING)
+    private ServiceType serviceType;
+
+    @OneToOne(
+            mappedBy = "appointment",
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    )
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
+
     @OneToMany(
             mappedBy = "appointment",
             fetch = FetchType.LAZY,
@@ -63,13 +93,6 @@ public class Appointment {
             orphanRemoval = true
     )
     @ToString.Exclude
-    private List<Service> services;
-
-    @OneToOne(
-            mappedBy = "appointment",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
-    )
-    @JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id")
-    private Schedule schedule;
+    private List<PartOrder> partOrders;
 
 }
