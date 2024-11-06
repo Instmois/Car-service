@@ -6,6 +6,7 @@ import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
 
@@ -18,5 +19,7 @@ public interface ClientService {
     ClientInfoUpdateResponseDto updateInfoAboutCurrentUser(ClientInfoUpdateRequestDto request, String email);
 
     Page<AppointmentResponseDto> getAllAppointments(Pageable of, String email);
+
+    BusyDaysResponseDto getAllBusyDays();
 
 }

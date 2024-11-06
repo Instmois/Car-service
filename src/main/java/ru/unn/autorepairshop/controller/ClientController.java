@@ -49,6 +49,12 @@ public class ClientController implements ClientApi {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/busy-days")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    public ResponseEntity<?> getAllBusyDays() {
+        return ResponseEntity.ok(clientService.getAllBusyDays());
+    }
+
     @PostMapping("/appointment")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     public ResponseEntity<?> createAppointment(Principal principal, @Validated AppointmentCreateRequestDto requestDto) {

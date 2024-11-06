@@ -8,6 +8,7 @@ import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
@@ -20,6 +21,7 @@ import ru.unn.autorepairshop.domain.mapper.client.ClientInfoUpdateResponseDtoMap
 import ru.unn.autorepairshop.exceptions.UserException;
 import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ClientService;
+import ru.unn.autorepairshop.service.ScheduleService;
 import ru.unn.autorepairshop.service.UserService;
 import ru.unn.autorepairshop.service.VehicleService;
 
@@ -36,6 +38,8 @@ public class ClientServiceImpl implements ClientService {
 
     private final AppointmentService appointmentService;
 
+    private final ScheduleService scheduleService;
+
     private final AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper;
 
     private final ClientInfoResponseDtoMapper clientInfoResponseDtoMapper;
@@ -43,14 +47,15 @@ public class ClientServiceImpl implements ClientService {
     private final ClientInfoUpdateResponseDtoMapper clientInfoUpdateResponseDtoMapper;
 
     private final static String DEFAULT_FIELD_STATUS = "В обработке";
-    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     @Autowired
     public ClientServiceImpl(
             UserService userService,
             VehicleService vehicleService,
             AppointmentService appointmentService,
+            ScheduleService scheduleService,
             AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper,
             ClientInfoResponseDtoMapper clientInfoResponseDtoMapper,
             ClientInfoUpdateResponseDtoMapper clientInfoUpdateResponseDtoMapper
@@ -58,6 +63,7 @@ public class ClientServiceImpl implements ClientService {
         this.userService = userService;
         this.vehicleService = vehicleService;
         this.appointmentService = appointmentService;
+        this.scheduleService = scheduleService;
         this.appointmentCreatedResponseDtoMapper = appointmentCreatedResponseDtoMapper;
         this.clientInfoResponseDtoMapper = clientInfoResponseDtoMapper;
         this.clientInfoUpdateResponseDtoMapper = clientInfoUpdateResponseDtoMapper;
@@ -147,6 +153,12 @@ public class ClientServiceImpl implements ClientService {
     public Page<AppointmentResponseDto> getAllAppointments(Pageable pageRequest, String email) {
         Page<Appointment> userAppointments = appointmentService.findAllByUser(pageRequest, email);
         return userAppointments.map(this::mapToDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BusyDaysResponseDto getAllBusyDays() {
+        return new BusyDaysResponseDto(scheduleService.getAllBusyTimes());
     }
 
     /**
