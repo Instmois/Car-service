@@ -1,6 +1,6 @@
 package ru.unn.autorepairshop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.entity.Vehicle;
@@ -10,16 +10,12 @@ import ru.unn.autorepairshop.service.VehicleService;
 
 import java.util.Optional;
 
-@Service
+@RequiredArgsConstructor
 @Transactional
+@Service
 public class VehicleServiceImpl implements VehicleService {
 
     private final VehicleRepository vehicleRepository;
-
-    @Autowired
-    public VehicleServiceImpl(VehicleRepository vehicleRepository) {
-        this.vehicleRepository = vehicleRepository;
-    }
 
     @Override
     @Transactional(readOnly = true)

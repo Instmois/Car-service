@@ -1,6 +1,6 @@
 package ru.unn.autorepairshop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,16 +12,12 @@ import ru.unn.autorepairshop.service.AppointmentService;
 
 import java.util.List;
 
-@Service
+@RequiredArgsConstructor
 @Transactional
+@Service
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-
-    @Autowired
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository) {
-        this.appointmentRepository = appointmentRepository;
-    }
 
     @Override
     public Appointment save(Appointment appointment) {

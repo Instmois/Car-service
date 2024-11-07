@@ -1,6 +1,6 @@
 package ru.unn.autorepairshop.validator;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
@@ -15,18 +15,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Component
 public class AppointmentRequestValidator extends AppointmentRequestValidatorTemplate {
 
     private final UserService userService;
 
     private final AppointmentService appointmentService;
-
-    @Autowired
-    public AppointmentRequestValidator(UserService userService, AppointmentService appointmentService) {
-        this.userService = userService;
-        this.appointmentService = appointmentService;
-    }
 
     /**
      * Валидация прав собственности пользователя на автомобиль.

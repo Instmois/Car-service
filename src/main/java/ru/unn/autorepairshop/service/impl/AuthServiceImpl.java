@@ -1,6 +1,6 @@
 package ru.unn.autorepairshop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,9 @@ import ru.unn.autorepairshop.security.jwt.JwtCore;
 import ru.unn.autorepairshop.service.AuthService;
 import ru.unn.autorepairshop.service.UserService;
 
-@Service
+@RequiredArgsConstructor
 @Transactional
+@Service
 public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
@@ -24,13 +25,6 @@ public class AuthServiceImpl implements AuthService {
     private final JwtCore jwtCore;
 
     private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    public AuthServiceImpl(UserService userService, JwtCore jwtCore, AuthenticationManager authenticationManager) {
-        this.userService = userService;
-        this.jwtCore = jwtCore;
-        this.authenticationManager = authenticationManager;
-    }
 
     @Override
     public JwtResponse login(JwtRequest loginRequest) {
