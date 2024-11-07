@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.unn.autorepairshop.domain.dto.request.JwtRefreshRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.UserCreateRequestDto;
@@ -50,7 +49,7 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Login -> возвращает access и refresh token")
-    ResponseEntity<?> login(
+    JwtResponse login(
             @RequestBody JwtRequest jwtRequest
     );
 
@@ -77,7 +76,7 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Register -> возвращает access и refresh token")
-    ResponseEntity<?> register(
+    JwtResponse register(
             @RequestBody UserCreateRequestDto request
     );
 
@@ -114,7 +113,7 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Возвращает обновленные access и refresh токены")
-    ResponseEntity<?> refresh(
+    JwtResponse refresh(
             @RequestBody JwtRefreshRequestDto request
     );
 

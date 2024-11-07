@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
@@ -78,7 +78,7 @@ public interface ClientApi {
             )
     })
     @Operation(summary = "Формирование заявки на работу сервиса")
-    ResponseEntity<?> createAppointment(
+    AppointmentCreatedResponseDto createAppointment(
             Principal principal,
             @RequestBody @Validated AppointmentCreateRequestDto requestDto
     );
@@ -126,7 +126,7 @@ public interface ClientApi {
             )
     })
     @Operation(summary = "Получение информации о текущем пользователе")
-    ResponseEntity<?> getCurrentClient(
+    ClientInfoResponseDto getCurrentClient(
             Principal principal
     );
 
@@ -183,7 +183,7 @@ public interface ClientApi {
             )
     })
     @Operation(summary = "Обновление информации о текущем пользователе")
-    ResponseEntity<?> updateCurrentClient(
+    ClientInfoUpdateResponseDto updateCurrentClient(
             Principal principal,
             @RequestBody @Validated ClientInfoUpdateRequestDto request
     );
@@ -221,7 +221,7 @@ public interface ClientApi {
             )
     })
     @Operation(summary = "Получение всех заявок пользователя")
-    ResponseEntity<?> getAllAppointments(Principal principal, Pageable pageable);
+    Page<AppointmentResponseDto> getAllAppointments(Principal principal, Pageable pageable);
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -256,6 +256,6 @@ public interface ClientApi {
             )
     })
     @Operation(summary = "Получение информации по занятым датам")
-    ResponseEntity<?> getAllBusyDays();
+    BusyDaysResponseDto getAllBusyDays();
 
 }

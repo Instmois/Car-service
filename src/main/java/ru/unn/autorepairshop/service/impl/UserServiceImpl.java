@@ -1,6 +1,6 @@
 package ru.unn.autorepairshop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +19,9 @@ import ru.unn.autorepairshop.service.UserService;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@RequiredArgsConstructor
 @Transactional
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -30,19 +31,6 @@ public class UserServiceImpl implements UserService {
     private final UserCreateResponseDtoMapper userCreateResponseDtoMapper;
 
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public UserServiceImpl(
-            UserRepository userRepository,
-            UserCreateRequestDtoMapper userCreateRequestDtoMapper,
-            UserCreateResponseDtoMapper userCreateResponseDtoMapper,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.userRepository = userRepository;
-        this.userCreateRequestDtoMapper = userCreateRequestDtoMapper;
-        this.userCreateResponseDtoMapper = userCreateResponseDtoMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     @Transactional(readOnly = true)

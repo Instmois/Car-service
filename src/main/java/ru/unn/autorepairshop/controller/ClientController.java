@@ -1,82 +1,85 @@
 package ru.unn.autorepairshop.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.unn.autorepairshop.controller.api.ClientApi;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
 import ru.unn.autorepairshop.facade.AppointmentFacade;
 import ru.unn.autorepairshop.service.ClientService;
 
 import java.security.Principal;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/client")
+@RestController
 public class ClientController implements ClientApi {
 
     private final AppointmentFacade appointmentFacade;
 
     private final ClientService clientService;
 
-    @Autowired
-    public ClientController(
-            AppointmentFacade appointmentFacade,
-            ClientService clientService
-    ) {
-        this.appointmentFacade = appointmentFacade;
-        this.clientService = clientService;
-    }
-
-    @PostMapping("/appointments")
+    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-    public ResponseEntity<?> getAllAppointments(Principal principal, Pageable pageable) {
-        Page<AppointmentResponseDto> response = clientService.getAllAppointments(
+    @PostMapping("/appointments")
+    public Page<AppointmentResponseDto> getAllAppointments(
+            Principal principal,
+            @PageableDefault(page = 0, size = 6) Pageable pageable
+    ) {
+        return clientService.getAllAppointments(
                 pageable,
                 principal.getName()
         );
-
-        return ResponseEntity.ok(response);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @GetMapping("/busy-days")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-    public ResponseEntity<?> getAllBusyDays() {
-        return ResponseEntity.ok(clientService.getAllBusyDays());
+    public BusyDaysResponseDto getAllBusyDays() {
+        return clientService.getAllBusyDays();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @PostMapping("/appointment")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-    public ResponseEntity<?> createAppointment(Principal principal, @Validated AppointmentCreateRequestDto requestDto) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(appointmentFacade.createAppointment(requestDto, principal.getName()));
+    public AppointmentCreatedResponseDto createAppointment(
+            Principal principal,
+            @Validated AppointmentCreateRequestDto requestDto
+    ) {
+        return appointmentFacade.createAppointment(requestDto, principal.getName());
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @GetMapping("/current")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-    public ResponseEntity<?> getCurrentClient(Principal principal) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clientService.getInfoAboutCurrentUser(principal.getName()));
+    public ClientInfoResponseDto getCurrentClient(Principal principal) {
+        return clientService.getInfoAboutCurrentUser(principal.getName());
     }
 
-    @PutMapping("/current")
+    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-    public ResponseEntity<?> updateCurrentClient(Principal principal, @Validated ClientInfoUpdateRequestDto request) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clientService.updateInfoAboutCurrentUser(request, principal.getName()));
+    @PutMapping("/current")
+    public ClientInfoUpdateResponseDto updateCurrentClient(
+            Principal principal,
+            @Validated ClientInfoUpdateRequestDto request
+    ) {
+        return clientService.updateInfoAboutCurrentUser(request, principal.getName());
     }
 
 }

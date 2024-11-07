@@ -1,6 +1,6 @@
 package ru.unn.autorepairshop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +28,9 @@ import ru.unn.autorepairshop.service.VehicleService;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-@org.springframework.stereotype.Service
+@RequiredArgsConstructor
 @Transactional
+@org.springframework.stereotype.Service
 public class ClientServiceImpl implements ClientService {
 
     private final UserService userService;
@@ -49,25 +50,6 @@ public class ClientServiceImpl implements ClientService {
     private final static String DEFAULT_FIELD_STATUS = "В обработке";
 
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-
-    @Autowired
-    public ClientServiceImpl(
-            UserService userService,
-            VehicleService vehicleService,
-            AppointmentService appointmentService,
-            ScheduleService scheduleService,
-            AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper,
-            ClientInfoResponseDtoMapper clientInfoResponseDtoMapper,
-            ClientInfoUpdateResponseDtoMapper clientInfoUpdateResponseDtoMapper
-    ) {
-        this.userService = userService;
-        this.vehicleService = vehicleService;
-        this.appointmentService = appointmentService;
-        this.scheduleService = scheduleService;
-        this.appointmentCreatedResponseDtoMapper = appointmentCreatedResponseDtoMapper;
-        this.clientInfoResponseDtoMapper = clientInfoResponseDtoMapper;
-        this.clientInfoUpdateResponseDtoMapper = clientInfoUpdateResponseDtoMapper;
-    }
 
     @Override
     public AppointmentCreatedResponseDto createAppointment(AppointmentCreateRequestDto request, String email) {

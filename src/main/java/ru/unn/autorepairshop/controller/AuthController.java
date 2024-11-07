@@ -1,49 +1,44 @@
 package ru.unn.autorepairshop.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.unn.autorepairshop.controller.api.AuthApi;
 import ru.unn.autorepairshop.domain.dto.request.JwtRefreshRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.UserCreateRequestDto;
 import ru.unn.autorepairshop.security.dto.JwtRequest;
+import ru.unn.autorepairshop.security.dto.JwtResponse;
 import ru.unn.autorepairshop.service.AuthService;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@RestController
 public class AuthController implements AuthApi {
 
     private final AuthService authService;
 
-    @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Validated UserCreateRequestDto request) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(authService.register(request));
+    public JwtResponse register(@RequestBody @Validated UserCreateRequestDto request) {
+        return authService.register(request);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Validated JwtRequest loginRequest){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(authService.login(loginRequest));
+    public JwtResponse login(@RequestBody @Validated JwtRequest loginRequest) {
+        return authService.login(loginRequest);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(@RequestBody JwtRefreshRequestDto refreshToken){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(authService.refresh(refreshToken));
+    public JwtResponse refresh(@RequestBody JwtRefreshRequestDto refreshToken) {
+        return authService.refresh(refreshToken);
     }
 
 }
+

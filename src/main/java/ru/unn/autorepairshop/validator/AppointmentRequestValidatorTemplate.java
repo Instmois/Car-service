@@ -12,7 +12,6 @@ public abstract class AppointmentRequestValidatorTemplate {
 
     protected abstract void validateUserOwnership(AppointmentCreateRequestDto request, String email);
 
-
     protected abstract void validateNoSimilarWorksExist(AppointmentCreateRequestDto request);
 
     protected void throwValidationError(AppointmentException.CODE code) {
