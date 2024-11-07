@@ -18,6 +18,7 @@ ext {
     jacartaValidationVersion = '3.0.2'
     hibernateValidatorVersion = '8.0.0.Final'
     mapstructVersion = '1.5.5.Final'
+    mockitoVersion = '5.12.0'
     openapiVersion = '2.2.0'
     liquibaseVersion = "4.20.0"
 }
@@ -43,6 +44,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     implementation "jakarta.validation:jakarta.validation-api:$jacartaValidationVersion"
