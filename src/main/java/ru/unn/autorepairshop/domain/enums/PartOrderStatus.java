@@ -2,8 +2,10 @@ package ru.unn.autorepairshop.domain.enums;
 
 public enum PartOrderStatus {
 
-    WAITING,
+    NEED_TO_ORDER,
 
-    RECEIVED
+    ON_THE_WAY,
+
+    DELIVERED
 
 }

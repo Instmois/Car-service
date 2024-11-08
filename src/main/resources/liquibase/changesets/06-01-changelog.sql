@@ -39,6 +39,10 @@ CREATE TABLE part_order
     part_name      VARCHAR(255),
     status         VARCHAR(255),
     appointment_id BIGINT                                  NOT NULL,
+    order_date    TIMESTAMP WITHOUT TIME ZONE,
+    delivery_date TIMESTAMP WITHOUT TIME ZONE,
+    amount        INTEGER,
+    price         DECIMAL(15, 2),
     CONSTRAINT pk_part_order PRIMARY KEY (part_order_id)
 );
 

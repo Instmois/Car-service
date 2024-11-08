@@ -15,8 +15,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             JOIN FETCH a.client c
             JOIN FETCH c.authData ad
             JOIN FETCH a.vehicle v
-            LEFT JOIN FETCH a.schedule s
-            LEFT JOIN FETCH s.mechanic m
+            JOIN FETCH a.schedule s
+            JOIN FETCH s.mechanic m
             WHERE ad.email = :email
             """)
     List<Appointment> findAllByClientEmail(String email);

@@ -11,16 +11,20 @@ import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.PartOrderResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
+import ru.unn.autorepairshop.domain.entity.PartOrder;
 import ru.unn.autorepairshop.domain.entity.User;
 import ru.unn.autorepairshop.domain.entity.Vehicle;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
+import ru.unn.autorepairshop.domain.enums.PartOrderStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentCreatedResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.client.ClientInfoResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.client.ClientInfoUpdateResponseDtoMapper;
 import ru.unn.autorepairshop.exceptions.UserException;
 import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ClientService;
+import ru.unn.autorepairshop.service.PartOrderService;
 import ru.unn.autorepairshop.service.ScheduleService;
 import ru.unn.autorepairshop.service.UserService;
 import ru.unn.autorepairshop.service.VehicleService;
@@ -40,6 +44,8 @@ public class ClientServiceImpl implements ClientService {
     private final AppointmentService appointmentService;
 
     private final ScheduleService scheduleService;
+
+    private final PartOrderService partOrderService;
 
     private final AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper;
 
@@ -101,7 +107,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional(readOnly = true)
     public Page<AppointmentResponseDto> getAllAppointments(Pageable pageRequest, String email) {
         Page<Appointment> userAppointments = appointmentService.findAllByUser(pageRequest, email);
-        return userAppointments.map(this::mapToDto);
+        return userAppointments.map(this::mapAppointmentToDto);
     }
 
     @Override
@@ -110,10 +116,38 @@ public class ClientServiceImpl implements ClientService {
         return new BusyDaysResponseDto(scheduleService.getAllBusyTimes());
     }
 
+    @Override
+    public Page<PartOrderResponseDto> getAllPartOrders(Pageable pageRequest, String email) {
+        Page<PartOrder> partOrders = partOrderService.findAllByUserEmail(email, pageRequest);
+        return partOrders.map(this::mapPartOrderToDto);
+    }
+
+    private PartOrderResponseDto mapPartOrderToDto(PartOrder partOrder) {
+        if (partOrder.getStatus() == PartOrderStatus.NEED_TO_ORDER) {
+            return new PartOrderResponseDto(
+                    partOrder.getPartName(),
+                    partOrder.getAmount(),
+                    DEFAULT_FIELD_STATUS,
+                    DEFAULT_FIELD_STATUS,
+                    partOrder.getPrice(),
+                    partOrder.getStatus()
+            );
+        } else {
+            return new PartOrderResponseDto(
+                    partOrder.getPartName(),
+                    partOrder.getAmount(),
+                    partOrder.getOrderDate().format(DATE_TIME_FORMATTER),
+                    partOrder.getDeliveryDate().format(DATE_TIME_FORMATTER),
+                    partOrder.getPrice(),
+                    partOrder.getStatus()
+            );
+        }
+    }
+
     /**
      * Преобразует Appointment в AppointmentResponseDto в зависимости от статуса заявки.
      */
-    private AppointmentResponseDto mapToDto(Appointment appointment) {
+    private AppointmentResponseDto mapAppointmentToDto(Appointment appointment) {
         if (appointment.getStatus() == AppointmentStatus.NEW) {
             return new AppointmentResponseDto(
                     DEFAULT_FIELD_STATUS,
