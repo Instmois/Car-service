@@ -21,6 +21,7 @@ import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.PartOrderResponseDto;
 import ru.unn.autorepairshop.facade.AppointmentFacade;
 import ru.unn.autorepairshop.service.ClientService;
 
@@ -80,6 +81,16 @@ public class ClientController implements ClientApi {
             @Validated ClientInfoUpdateRequestDto request
     ) {
         return clientService.updateInfoAboutCurrentUser(request, principal.getName());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @GetMapping("/part-orders")
+    public Page<PartOrderResponseDto> getAllPartOrders(
+            Principal principal,
+            @PageableDefault(page = 0, size = 6) Pageable pageable
+    ) {
+        return clientService.getAllPartOrders(pageable, principal.getName());
     }
 
 }

@@ -32,11 +32,11 @@ VALUES ('Puchkov D. Y.');
 -- changeset user:1730897093924-25
 -- Добавление автомобилей
 INSERT INTO vehicle (license_plate, model, client_id)
-VALUES ('K001OK', 'Toyota Camry', 1);
+VALUES ('K001OK52', 'Toyota Camry', 1);
 INSERT INTO vehicle (license_plate, model, client_id)
-VALUES ('S999YS', 'Honda Civic', 2);
+VALUES ('S999YS52', 'Honda Civic', 2);
 INSERT INTO vehicle (license_plate, model, client_id)
-VALUES ('C666CC', 'Ford Focus', 2);
+VALUES ('C666CC152', 'Ford Focus', 2);
 
 -- changeset user:1730897093924-26
 -- Добавление расписаний
@@ -52,7 +52,7 @@ VALUES ('NEW', '2024-11-06 10:00:00', 1, 1, 'REPAIR', NULL);
 INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type, schedule_id)
 VALUES ('AT_WORK', '2024-11-07 14:00:00', 2, 2, 'DIAGNOSTIC', 1);
 INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type, schedule_id)
-VALUES ('COMPLETED', '2024-11-07 16:00:00', 2, 3, 'DIAGNOSTIC', 2);
+VALUES ('DONE', '2024-11-07 16:00:00', 2, 3, 'DIAGNOSTIC', 2);
 
 -- changeset user:1730897093924-28
 -- Обновление расписания с назначением на заявки

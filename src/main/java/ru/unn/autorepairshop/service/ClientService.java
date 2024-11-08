@@ -9,6 +9,7 @@ import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.PartOrderResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
 import ru.unn.autorepairshop.exceptions.UserException;
 
@@ -78,5 +79,7 @@ public interface ClientService {
      * @return объект {@link BusyDaysResponseDto}, содержащий список занятых дат.
      */
     BusyDaysResponseDto getAllBusyDays();
+
+    Page<PartOrderResponseDto> getAllPartOrders(Pageable pageable, String name);
 
 }
