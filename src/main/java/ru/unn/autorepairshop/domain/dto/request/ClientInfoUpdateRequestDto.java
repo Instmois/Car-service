@@ -21,7 +21,10 @@ public record ClientInfoUpdateRequestDto(
         String patronymic,
 
         @Schema(description = "Номер телефона", example = "88005553535")
-        @Pattern(regexp = "^[78]\\d{10}$", message = "Phone number must be 11 digits and start with 7 or 8")
+        @Pattern(
+                regexp = "^(8\\d{10}|\\+7\\d{10})$",
+                message = "Телефонный номер должен начинаться с 8 и содержать 11 цифр или с +7 и содержать 11 цифр"
+        )
         String phoneNumber,
 
         @Schema(description = "Email", example = "ivan@mail.ru")
