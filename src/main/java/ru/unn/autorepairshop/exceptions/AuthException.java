@@ -11,6 +11,8 @@ public class AuthException extends RuntimeException{
 
         INVALID_REPEAT_PASSWORD("Пароли не совпадают"),
 
+        REFRESH_TOKEN_IS_NULL("Refresh token is null"),
+
         EMAIL_IN_USE("Этот email уже используется");
 
         final String codeDescription;

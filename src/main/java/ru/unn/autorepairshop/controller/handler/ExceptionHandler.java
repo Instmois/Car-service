@@ -49,7 +49,7 @@ public class ExceptionHandler {
         AuthException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case JWT_VALIDATION_ERROR -> HttpStatus.UNAUTHORIZED;
-            case INVALID_REPEAT_PASSWORD -> HttpStatus.BAD_REQUEST;
+            case INVALID_REPEAT_PASSWORD, REFRESH_TOKEN_IS_NULL -> HttpStatus.BAD_REQUEST;
             case EMAIL_IN_USE -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
