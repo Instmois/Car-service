@@ -10,12 +10,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.unn.autorepairshop.controller.api.ClientApi;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
+import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
@@ -38,7 +40,7 @@ public class ClientController implements ClientApi {
 
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
-    @PostMapping("/appointments")
+    @GetMapping("/appointments")
     public Page<AppointmentResponseDto> getAllAppointments(
             Principal principal,
             @PageableDefault(page = 0, size = 6) Pageable pageable
@@ -61,7 +63,7 @@ public class ClientController implements ClientApi {
     @PostMapping("/appointment")
     public AppointmentCreatedResponseDto createAppointment(
             Principal principal,
-            @Validated AppointmentCreateRequestDto requestDto
+            @Validated @RequestBody AppointmentCreateRequestDto requestDto
     ) {
         return appointmentFacade.createAppointment(requestDto, principal.getName());
     }
@@ -78,7 +80,7 @@ public class ClientController implements ClientApi {
     @PutMapping("/current")
     public ClientInfoUpdateResponseDto updateCurrentClient(
             Principal principal,
-            @Validated ClientInfoUpdateRequestDto request
+            @Validated @RequestBody ClientInfoUpdateRequestDto request
     ) {
         return clientService.updateInfoAboutCurrentUser(request, principal.getName());
     }
@@ -91,6 +93,16 @@ public class ClientController implements ClientApi {
             @PageableDefault(page = 0, size = 6) Pageable pageable
     ) {
         return clientService.getAllPartOrders(pageable, principal.getName());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @PutMapping("/password")
+    public Void updateClientPassword(
+            Principal principal,
+            @Validated @RequestBody ClientUpdatePasswordRequestDto request
+    ) {
+        return clientService.updatePassword(request, principal.getName());
     }
 
 }

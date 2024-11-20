@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
+import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
@@ -72,7 +73,6 @@ public interface ClientService {
 
     /**
      * Получает список всех занятых дат для расписания.
-     *
      * Этот метод возвращает объект {@link BusyDaysResponseDto}, который содержит
      * список занятых дат в виде объектов {@link LocalDateTime}.
      *
@@ -82,4 +82,5 @@ public interface ClientService {
 
     Page<PartOrderResponseDto> getAllPartOrders(Pageable pageable, String name);
 
+    Void updatePassword(ClientUpdatePasswordRequestDto request, String email);
 }

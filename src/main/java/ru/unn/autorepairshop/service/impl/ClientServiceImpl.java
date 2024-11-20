@@ -3,9 +3,11 @@ package ru.unn.autorepairshop.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
+import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
@@ -21,6 +23,7 @@ import ru.unn.autorepairshop.domain.enums.PartOrderStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentCreatedResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.client.ClientInfoResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.client.ClientInfoUpdateResponseDtoMapper;
+import ru.unn.autorepairshop.exceptions.AuthException;
 import ru.unn.autorepairshop.exceptions.UserException;
 import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ClientService;
@@ -46,6 +49,8 @@ public class ClientServiceImpl implements ClientService {
     private final ScheduleService scheduleService;
 
     private final PartOrderService partOrderService;
+
+    private final PasswordEncoder passwordEncoder;
 
     private final AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper;
 
@@ -117,9 +122,31 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PartOrderResponseDto> getAllPartOrders(Pageable pageRequest, String email) {
         Page<PartOrder> partOrders = partOrderService.findAllByUserEmail(email, pageRequest);
         return partOrders.map(this::mapPartOrderToDto);
+    }
+
+    @Override
+    public Void updatePassword(ClientUpdatePasswordRequestDto request, String email) {
+        User user = userService.getByEmail(email);
+
+        if (!passwordEncoder.matches(request.oldPassword(), user.getAuthData().getPassword())) {
+            throw AuthException.CODE.INVALID_OLD_PASSWORD.get();
+        }
+
+        if (!request.newPassword().equals(request.confirmPassword())) {
+            throw AuthException.CODE.INVALID_REPEAT_PASSWORD.get();
+        }
+
+        if (request.oldPassword().equals(request.newPassword())) {
+            throw AuthException.CODE.OLD_PASSWORD_EQUALS_TO_NEW_PASSWORD.get();
+        }
+
+        user.getAuthData().setPassword(passwordEncoder.encode(request.newPassword()));
+
+        return null;
     }
 
     private PartOrderResponseDto mapPartOrderToDto(PartOrder partOrder) {
