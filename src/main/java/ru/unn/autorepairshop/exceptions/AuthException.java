@@ -9,7 +9,13 @@ public class AuthException extends RuntimeException{
 
         JWT_VALIDATION_ERROR("Ошибка валидации JWT"),
 
+        OLD_PASSWORD_EQUALS_TO_NEW_PASSWORD("Старый пароль совпадает с новым"),
+
+        INVALID_OLD_PASSWORD("Старый пароль не верен"),
+
         INVALID_REPEAT_PASSWORD("Пароли не совпадают"),
+
+        REFRESH_TOKEN_IS_NULL("Refresh token is null"),
 
         EMAIL_IN_USE("Этот email уже используется");
 

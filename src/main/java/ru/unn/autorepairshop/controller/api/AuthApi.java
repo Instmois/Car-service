@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import ru.unn.autorepairshop.domain.dto.request.JwtRefreshRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.UserCreateRequestDto;
@@ -114,7 +116,9 @@ public interface AuthApi {
     })
     @Operation(summary = "Возвращает обновленные access и refresh токены")
     JwtResponse refresh(
-            @RequestBody JwtRefreshRequestDto request
+            @CookieValue(name = "refreshToken", required = false) String tokenFromCookie,
+            @RequestBody(required = false) JwtRefreshRequestDto refreshToken,
+            HttpServletRequest request
     );
 
 }

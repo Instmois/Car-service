@@ -27,6 +27,10 @@ spring:
     enabled: true
     default-schema: public
 
+app:
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN}
+
 security:
   jwt:
     access:
