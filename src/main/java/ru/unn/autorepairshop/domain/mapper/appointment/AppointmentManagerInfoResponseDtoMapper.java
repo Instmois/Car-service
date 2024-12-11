@@ -15,6 +15,7 @@ public interface AppointmentManagerInfoResponseDtoMapper {
     @Mapping(source = "appointmentDate", target = "startDate", dateFormat = "yyyy-MM-dd'T'HH:mm:ss")
     @Mapping(source = "serviceType", target = "serviceType")
     @Mapping(source = "status", target = "status")
+    @Mapping(source = "id", target = "id")
     AppointmentManagerInfoResponseDto toDto(Appointment entity);
 
 }

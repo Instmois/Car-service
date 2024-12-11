@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.ManagerViewResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentManagerInfoResponseDtoMapper;
@@ -26,6 +27,12 @@ public class ManagerServiceImpl implements ManagerService {
     public Page<AppointmentManagerInfoResponseDto> getAllAppointments(String client, AppointmentStatus statusFilter, PageRequest of) {
         Page<Appointment> appointments = appointmentService.findAllWithFilter(client, statusFilter, of);
         return appointments.map(appointmentManagerInfoResponseDtoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ManagerViewResponseDto getAppointment(Long id) {
+        return null;
     }
 
 }
