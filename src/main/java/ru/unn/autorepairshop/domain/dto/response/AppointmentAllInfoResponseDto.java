@@ -5,7 +5,7 @@ import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.enums.ServiceType;
 
 @Schema(description = "Информация о записи")
-public record AppointmentResponseDto(
+public record AppointmentAllInfoResponseDto(
 
         @Schema(description = "Дата и время начала записи", example = "2024-11-06T10:00:00")
         String startDate,

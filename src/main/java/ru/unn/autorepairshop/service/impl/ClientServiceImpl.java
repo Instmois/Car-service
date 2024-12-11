@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAllInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
@@ -110,7 +110,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<AppointmentResponseDto> getAllAppointments(Pageable pageRequest, String email) {
+    public Page<AppointmentAllInfoResponseDto> getAllAppointments(Pageable pageRequest, String email) {
         Page<Appointment> userAppointments = appointmentService.findAllByUser(pageRequest, email);
         return userAppointments.map(this::mapAppointmentToDto);
     }
@@ -174,9 +174,9 @@ public class ClientServiceImpl implements ClientService {
     /**
      * Преобразует Appointment в AppointmentResponseDto в зависимости от статуса заявки.
      */
-    private AppointmentResponseDto mapAppointmentToDto(Appointment appointment) {
+    private AppointmentAllInfoResponseDto mapAppointmentToDto(Appointment appointment) {
         if (appointment.getStatus() == AppointmentStatus.NEW) {
-            return new AppointmentResponseDto(
+            return new AppointmentAllInfoResponseDto(
                     DEFAULT_FIELD_STATUS,
                     DEFAULT_FIELD_STATUS,
                     appointment.getServiceType(),
@@ -186,7 +186,7 @@ public class ClientServiceImpl implements ClientService {
                     appointment.getStatus()
             );
         } else {
-            return new AppointmentResponseDto(
+            return new AppointmentAllInfoResponseDto(
                     appointment.getSchedule().getStartDate().format(DATE_TIME_FORMATTER),
                     appointment.getSchedule().getEndDate().format(DATE_TIME_FORMATTER),
                     appointment.getServiceType(),

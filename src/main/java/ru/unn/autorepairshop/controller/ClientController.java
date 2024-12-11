@@ -18,8 +18,8 @@ import ru.unn.autorepairshop.controller.api.ClientApi;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAllInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
@@ -41,7 +41,7 @@ public class ClientController implements ClientApi {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
     @GetMapping("/appointments")
-    public Page<AppointmentResponseDto> getAllAppointments(
+    public Page<AppointmentAllInfoResponseDto> getAllAppointments(
             Principal principal,
             @PageableDefault(page = 0, size = 6) Pageable pageable
     ) {
