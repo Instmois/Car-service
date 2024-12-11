@@ -3,19 +3,19 @@ package ru.unn.autorepairshop.domain.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
-@Schema(description = "Request DTO for updating client's password")
+@Schema(description = "DTO-запрос для обновления пароля клиента")
 public record ClientUpdatePasswordRequestDto(
 
-        @Schema(description = "Old password of the client", example = "oldPassword123")
-        @NotBlank(message = "Old password cannot be blank")
+        @Schema(description = "Старый пароль клиента", example = "oldPassword123")
+        @NotBlank(message = "Старый пароль не может быть пустым")
         String oldPassword,
 
-        @Schema(description = "New password of the client", example = "newPassword123")
-        @NotBlank(message = "New password cannot be blank")
+        @Schema(description = "Новый пароль клиента", example = "newPassword123")
+        @NotBlank(message = "Новый пароль не может быть пустым")
         String newPassword,
 
-        @Schema(description = "Confirmation of the new password", example = "newPassword123")
-        @NotBlank(message = "Confirm password cannot be blank")
+        @Schema(description = "Подтверждение нового пароля", example = "newPassword123")
+        @NotBlank(message = "Подтверждение пароля не может быть пустым")
         String confirmPassword
 
 ) {

@@ -36,7 +36,7 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorMessage> handleAuthException(AccessDeniedException ex) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        String message = ex.getMessage() + " to user with email: %s"
+        String message = ex.getMessage() + "для пользователя с email: %s"
                 .formatted(email);
 
         return ResponseEntity
@@ -90,7 +90,7 @@ public class ExceptionHandler {
 
         ValidationErrorMessage errorMessage = new ValidationErrorMessage(
                 codeStr,
-                "Validation failed",
+                "Ошибка валидации",
                 errors
         );
 
@@ -111,7 +111,7 @@ public class ExceptionHandler {
 
         ValidationErrorMessage errorMessage = new ValidationErrorMessage(
                 codeStr,
-                "Validation failed: Incorrect argument type",
+                "Ошибка валидации: неправильный тип аргумента",
                 errors
         );
 
@@ -134,7 +134,7 @@ public class ExceptionHandler {
 
         ValidationErrorMessage errorMessage = new ValidationErrorMessage(
                 codeStr,
-                "Validation failed",
+                "Ошибка валидации",
                 errors
         );
 
@@ -150,7 +150,7 @@ public class ExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String codeStr = "MISSING_PARAMETER";
 
-        String message = String.format("Parameter '%s' is missing", e.getParameterName());
+        String message = String.format("Параметр '%s' отсутствует", e.getParameterName());
 
         ErrorMessage errorMessage = new ErrorMessage(
                 codeStr,
