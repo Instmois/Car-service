@@ -9,41 +9,45 @@ import ru.unn.autorepairshop.domain.enums.ServiceType;
 
 import java.time.LocalDateTime;
 
-@Schema(description = "Request DTO for creating an appointment, containing vehicle details and requested services.")
+@Schema(
+        description = """
+                DTO-запрос для создания записи на обслуживание, \n
+                содержащий данные о транспортном средстве и запрашиваемых услугах.
+                """
+)
 public record AppointmentCreateRequestDto(
 
         @Schema(
-                description = "License plate of the vehicle.",
+                description = "Госномер транспортного средства.",
                 example = "A000AA"
         )
-        @NotNull(message = "License plate cannot be null.")
-        @NotEmpty(message = "License plate must not be empty.")
-        @Size(min = 2, max = 10, message = "License plate must be between 2 and 10 characters.")
+        @NotNull(message = "Госномер не может быть null.")
+        @NotEmpty(message = "Госномер не должен быть пустым.")
+        @Size(min = 2, max = 10, message = "Госномер должен содержать от 2 до 10 символов.")
         String licensePlate,
 
         @Schema(
-                description = "Model of the vehicle.",
+                description = "Модель транспортного средства.",
                 example = "Toyota Camry"
         )
-        @NotNull(message = "Model cannot be null.")
-        @NotEmpty(message = "Model must not be empty.")
+        @NotNull(message = "Модель не может быть null.")
+        @NotEmpty(message = "Модель не должна быть пустой.")
         String model,
 
         @Schema(
-                description = "Planned date and time for the appointment.",
+                description = "Планируемые дата и время записи на обслуживание.",
                 example = "2024-11-01T14:30:00"
         )
-        @NotNull(message = "Appointment date cannot be null.")
-        @Future(message = "Appointment date must be in the future.")
+        @NotNull(message = "Дата записи не может быть null.")
+        @Future(message = "Дата записи должна быть в будущем.")
         LocalDateTime appointmentDate,
 
         @Schema(
-                description = "Service type to be performed.",
+                description = "Тип услуги, которая будет выполнена.",
                 example = "REPAIR"
         )
-        @NotNull(message = "Service type cannot be null.")
+        @NotNull(message = "Тип услуги не может быть null.")
         ServiceType serviceType
 
 ) {
 }
-

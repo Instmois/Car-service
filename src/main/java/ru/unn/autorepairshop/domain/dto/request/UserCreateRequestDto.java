@@ -9,34 +9,34 @@ import org.hibernate.validator.constraints.Length;
 @Schema(description = "Форма для регистрации")
 public record UserCreateRequestDto(
 
-        @NotNull(message = "Firstname must be not null")
-        @Length(max = 255, message = "Firstname length must be smaller than 255 symbols")
+        @NotNull(message = "Имя не может быть null")
+        @Length(max = 255, message = "Длина имени должна быть меньше 255 символов")
         @Schema(description = "Имя", example = "Иван")
         String firstName,
 
-        @NotNull(message = "Lastname must be not null")
-        @Length(max = 255, message = "Lastname length must be smaller than 255 symbols")
+        @NotNull(message = "Фамилия не может быть null")
+        @Length(max = 255, message = "Длина фамилии должна быть меньше 255 символов")
         @Schema(description = "Фамилия", example = "Иванов")
         String lastName,
 
         @Schema(description = "Отчество", example = "Иванович")
-        @Length(max = 255, message = "Patronymic length must be smaller than 255 symbols")
+        @Length(max = 255, message = "Длина отчества должна быть меньше 255 символов")
         String patronymic,
 
-        @Pattern(regexp = "^[78]\\d{10}$", message = "Phone number must be 11 digits and start with 7 or 8")
+        @Pattern(regexp = "^[78]\\d{10}$", message = "Номер телефона должен содержать 11 цифр и начинаться с 7 или 8")
         @Schema(description = "Номер телефона", example = "88005553535")
         String phoneNumber,
 
-        @NotNull(message = "Password must be not null")
+        @NotNull(message = "Пароль не может быть null")
         @Schema(description = "Пароль", example = "1234")
         String password,
 
-        @NotNull(message = "Confirmation must be not null")
+        @NotNull(message = "Подтверждение пароля не может быть null")
         @Schema(description = "Повтор пароля", example = "1234")
         String repeatPassword,
 
-        @NotNull(message = "Email must be not null")
-        @Email(message = "Wrong email format")
+        @NotNull(message = "Email не может быть null")
+        @Email(message = "Неверный формат электронной почты")
         @Schema(description = "Email", example = "example@example.com")
         String email
 
