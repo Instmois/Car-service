@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedMechanicResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentShortInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoShortResponseDto;
@@ -13,7 +14,10 @@ import ru.unn.autorepairshop.domain.dto.response.MechanicListResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.PartOrderListResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.PartOrderResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
+import ru.unn.autorepairshop.domain.entity.Mechanic;
 import ru.unn.autorepairshop.domain.entity.PartOrder;
+import ru.unn.autorepairshop.domain.entity.Schedule;
+import ru.unn.autorepairshop.domain.entity.User;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentManagerInfoResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.partorder.PartOrderResponseDtoMapper;
@@ -21,6 +25,8 @@ import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ManagerService;
 import ru.unn.autorepairshop.service.MechanicService;
 import ru.unn.autorepairshop.service.PartOrderService;
+import ru.unn.autorepairshop.service.ScheduleService;
+import ru.unn.autorepairshop.service.UserService;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -35,6 +41,10 @@ public class ManagerServiceImpl implements ManagerService {
     private final PartOrderService partOrderService;
 
     private final MechanicService mechanicService;
+
+    private final UserService userService;
+
+    private final ScheduleService scheduleService;
 
     private final AppointmentManagerInfoResponseDtoMapper appointmentManagerInfoResponseDtoMapper;
 
@@ -62,17 +72,53 @@ public class ManagerServiceImpl implements ManagerService {
         return mechanicService.getAllMechanics();
     }
 
+    @Override
+    public AppointmentAddedMechanicResponseDto addMechanicToAppointment(String email, Long appointmentId, Long masterId) {
+        Appointment appointment = appointmentService.findById(appointmentId);
+        User manager = userService.getByEmail(email);
+        Schedule schedule = appointment.getSchedule();
+
+        if (schedule == null) {
+            schedule = new Schedule();
+        }
+
+        Mechanic mechanic = mechanicService.getMechanicById(masterId);
+
+        schedule.setMechanic(mechanic);
+        schedule.setClient(manager);
+        schedule.setAppointment(appointment);
+
+        if (appointment.getStatus().equals(AppointmentStatus.NEW)
+                && schedule.getStartDate() != null
+                && schedule.getEndDate() != null) {
+            appointment.setStatus(AppointmentStatus.AT_WORK);
+        }
+
+        scheduleService.save(schedule); //TODO не сетится id задачи на заявку
+        appointment.setSchedule(schedule);
+
+        appointmentService.save(appointment);
+
+        return new AppointmentAddedMechanicResponseDto(appointmentId, masterId);
+    }
+
     private ManagerViewResponseDto mapToManagerViewResponseDto(Appointment appointment) {
         AppointmentShortInfoResponseDto appointmentShortInfoResponseDto = new AppointmentShortInfoResponseDto(
                 appointment.getServiceType(),
                 appointment.getSchedule() != null
+                        ? appointment.getSchedule().getMechanic() != null
                         ? appointment.getSchedule().getMechanic().getInitials()
+                        : ""
                         : "",
                 appointment.getSchedule() != null
+                        ? appointment.getSchedule().getStartDate() != null
                         ? appointment.getSchedule().getStartDate().format(DATE_TIME_FORMATTER)
+                        : ""
                         : "",
                 appointment.getSchedule() != null
+                        ? appointment.getSchedule().getEndDate() != null
                         ? appointment.getSchedule().getEndDate().format(DATE_TIME_FORMATTER)
+                        : ""
                         : "",
                 appointment.getStatus()
         );

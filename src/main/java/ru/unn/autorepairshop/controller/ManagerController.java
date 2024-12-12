@@ -8,16 +8,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.unn.autorepairshop.controller.api.ManagerApi;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentGetAllRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedMechanicResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ManagerViewResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.MechanicListResponseDto;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.service.ManagerService;
+
+import java.security.Principal;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/manager")
@@ -53,6 +57,17 @@ public class ManagerController implements ManagerApi {
     @GetMapping("/appointment/masters")
     public MechanicListResponseDto getAllMechanics() {
         return managerService.getAllMechanics();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PutMapping("/appointment/{appointmentId}/master/{masterId}")
+    public AppointmentAddedMechanicResponseDto addMechanicToAppointment(
+            Principal principal,
+            @PathVariable Long appointmentId,
+            @PathVariable Long masterId
+    ) {
+        return managerService.addMechanicToAppointment(principal.getName(), appointmentId, masterId);
     }
 
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.response.MechanicListResponseDto;
+import ru.unn.autorepairshop.domain.entity.Mechanic;
 import ru.unn.autorepairshop.domain.mapper.mechanic.MechanicResponseDtoMapper;
 import ru.unn.autorepairshop.repository.MechanicRepository;
 import ru.unn.autorepairshop.service.MechanicService;
@@ -22,6 +23,12 @@ public class MechanicServiceImpl implements MechanicService {
     public MechanicListResponseDto getAllMechanics() {
         mechanicRepository.findAll().forEach(System.out::println);
         return new MechanicListResponseDto(mechanicResponseDtoMapper.toDto(mechanicRepository.findAll()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Mechanic getMechanicById(Long id) {
+        return mechanicRepository.findById(id).orElse(null);
     }
 
 }
