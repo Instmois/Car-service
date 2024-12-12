@@ -58,8 +58,8 @@ public class Schedule {
     )
     private User client;
 
-    @OneToOne()
-    @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id")
+    @OneToOne
+    @JoinColumn(name = "appointment_id", referencedColumnName = "appointment_id", nullable = false)
     private Appointment appointment;
 
     @ManyToOne(

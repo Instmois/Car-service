@@ -94,13 +94,13 @@ public class ManagerServiceImpl implements ManagerService {
             appointment.setStatus(AppointmentStatus.AT_WORK);
         }
 
-        scheduleService.save(schedule); //TODO не сетится id задачи на заявку
+        scheduleService.save(schedule);
         appointment.setSchedule(schedule);
-
         appointmentService.save(appointment);
 
         return new AppointmentAddedMechanicResponseDto(appointmentId, masterId);
     }
+
 
     private ManagerViewResponseDto mapToManagerViewResponseDto(Appointment appointment) {
         AppointmentShortInfoResponseDto appointmentShortInfoResponseDto = new AppointmentShortInfoResponseDto(

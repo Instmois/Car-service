@@ -9,7 +9,6 @@ CREATE TABLE appointment
     client_id        BIGINT                                  NOT NULL,
     vehicle_id       BIGINT                                  NOT NULL,
     service_type     VARCHAR(255),
-    schedule_id      BIGINT,
     CONSTRAINT pk_appointment PRIMARY KEY (appointment_id)
 );
 
@@ -80,10 +79,6 @@ CREATE TABLE vehicle
     CONSTRAINT pk_vehicle PRIMARY KEY (vehicle_id)
 );
 
--- changeset user:1730897093924-8
-ALTER TABLE appointment
-    ADD CONSTRAINT uc_appointment_schedule UNIQUE (schedule_id);
-
 -- changeset user:1730897093924-9
 ALTER TABLE auth_data
     ADD CONSTRAINT uc_auth_data_email UNIQUE (email);
@@ -103,10 +98,6 @@ ALTER TABLE vehicle
 -- changeset user:1730897093924-13
 ALTER TABLE appointment
     ADD CONSTRAINT FK_APPOINTMENT_ON_CLIENT FOREIGN KEY (client_id) REFERENCES "user" (user_id);
-
--- changeset user:1730897093924-14
-ALTER TABLE appointment
-    ADD CONSTRAINT FK_APPOINTMENT_ON_SCHEDULE FOREIGN KEY (schedule_id) REFERENCES schedule (schedule_id);
 
 -- changeset user:1730897093924-15
 ALTER TABLE appointment

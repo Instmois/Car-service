@@ -9,6 +9,6 @@ public interface ScheduleService {
 
     List<LocalDateTime> getAllBusyTimes();
 
-    void save(Schedule schedule);
+    Schedule save(Schedule schedule);
 
 }

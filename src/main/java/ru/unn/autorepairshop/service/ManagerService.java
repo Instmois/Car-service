@@ -17,4 +17,5 @@ public interface ManagerService {
     MechanicListResponseDto getAllMechanics();
 
     AppointmentAddedMechanicResponseDto addMechanicToAppointment(String email, Long appointmentId, Long masterId);
+
 }
