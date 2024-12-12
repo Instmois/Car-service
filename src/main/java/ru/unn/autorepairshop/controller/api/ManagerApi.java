@@ -9,8 +9,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentGetAllRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.ManagerViewResponseDto;
 import ru.unn.autorepairshop.exceptions.message.ErrorMessage;
 
 @Tag(name = "Manager API", description = "API для работы менеджеров")
@@ -64,5 +66,53 @@ public interface ManagerApi {
     )
     @GetMapping("/appointments")
     Page<AppointmentManagerInfoResponseDto> getAllAppointments(@Valid AppointmentGetAllRequestDto request);
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешное получение информации",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ManagerViewResponseDto.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Не авторизирован",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Доступ к методу не доступен",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Данные не найдены",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение полной информации о заявке"
+    )
+    @GetMapping("/appointment/{id}")
+    ManagerViewResponseDto getAppointment(@PathVariable Long id);
 
 }

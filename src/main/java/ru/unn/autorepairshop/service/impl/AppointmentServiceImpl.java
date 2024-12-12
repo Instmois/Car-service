@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.entity.Appointment;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
+import ru.unn.autorepairshop.exceptions.AppointmentException;
 import ru.unn.autorepairshop.repository.AppointmentRepository;
 import ru.unn.autorepairshop.service.AppointmentService;
 
@@ -24,6 +25,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment save(Appointment appointment) {
         return appointmentRepository.save(appointment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Appointment findById(Long id) {
+        return appointmentRepository.findById(id).orElseThrow(AppointmentException.CODE.APPOINTMENT_IS_NOT_EXIST::get);
     }
 
     @Override

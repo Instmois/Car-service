@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Dto-response с информацией о клиенте для окна заявки менеджера")
 public record ClientInfoShortResponseDto(
 
-        @Schema(description = "ФИО клиента", example = "Белов Б. В")
+        @Schema(description = "ФИО клиента", example = "Белов Б. В.")
         String client,
 
         @Schema(description = "Марка и модель авто", example = "Toyota Avensis")

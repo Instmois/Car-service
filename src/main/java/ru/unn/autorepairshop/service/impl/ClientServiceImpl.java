@@ -19,10 +19,10 @@ import ru.unn.autorepairshop.domain.entity.PartOrder;
 import ru.unn.autorepairshop.domain.entity.User;
 import ru.unn.autorepairshop.domain.entity.Vehicle;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
-import ru.unn.autorepairshop.domain.enums.PartOrderStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentCreatedResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.client.ClientInfoResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.client.ClientInfoUpdateResponseDtoMapper;
+import ru.unn.autorepairshop.domain.mapper.partorder.PartOrderResponseDtoMapper;
 import ru.unn.autorepairshop.exceptions.AuthException;
 import ru.unn.autorepairshop.exceptions.UserException;
 import ru.unn.autorepairshop.service.AppointmentService;
@@ -53,6 +53,8 @@ public class ClientServiceImpl implements ClientService {
     private final PasswordEncoder passwordEncoder;
 
     private final AppointmentCreatedResponseDtoMapper appointmentCreatedResponseDtoMapper;
+
+    private final PartOrderResponseDtoMapper partOrderResponseDtoMapper;
 
     private final ClientInfoResponseDtoMapper clientInfoResponseDtoMapper;
 
@@ -125,7 +127,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional(readOnly = true)
     public Page<PartOrderResponseDto> getAllPartOrders(Pageable pageRequest, String email) {
         Page<PartOrder> partOrders = partOrderService.findAllByUserEmail(email, pageRequest);
-        return partOrders.map(this::mapPartOrderToDto);
+        return partOrders.map(partOrderResponseDtoMapper::mapPartOrderToDto);
     }
 
     @Override
@@ -147,28 +149,6 @@ public class ClientServiceImpl implements ClientService {
         user.getAuthData().setPassword(passwordEncoder.encode(request.newPassword()));
 
         return null;
-    }
-
-    private PartOrderResponseDto mapPartOrderToDto(PartOrder partOrder) {
-        if (partOrder.getStatus() == PartOrderStatus.NEED_TO_ORDER) {
-            return new PartOrderResponseDto(
-                    partOrder.getPartName(),
-                    partOrder.getAmount(),
-                    DEFAULT_FIELD_STATUS,
-                    DEFAULT_FIELD_STATUS,
-                    partOrder.getPrice(),
-                    partOrder.getStatus()
-            );
-        } else {
-            return new PartOrderResponseDto(
-                    partOrder.getPartName(),
-                    partOrder.getAmount(),
-                    partOrder.getOrderDate().format(DATE_TIME_FORMATTER),
-                    partOrder.getDeliveryDate().format(DATE_TIME_FORMATTER),
-                    partOrder.getPrice(),
-                    partOrder.getStatus()
-            );
-        }
     }
 
     /**

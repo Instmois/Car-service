@@ -12,10 +12,11 @@ public interface AppointmentService {
 
     Appointment save(Appointment appointment);
 
+    Appointment findById(Long id);
+
     List<Appointment> findAllByLicencePlate(String licencePlate);
 
     Page<Appointment> findAllByUser(Pageable of, String email);
-
 
     Page<Appointment> findAllWithFilter(String client, AppointmentStatus statusFilter, PageRequest of);
 

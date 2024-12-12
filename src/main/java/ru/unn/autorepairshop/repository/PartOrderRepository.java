@@ -17,4 +17,6 @@ public interface PartOrderRepository extends JpaRepository<PartOrder, Long> {
             """)
     List<PartOrder> findAllByClientEmail(String email);
 
+    List<PartOrder> findAllByAppointment_Id(Long id);
+
 }
