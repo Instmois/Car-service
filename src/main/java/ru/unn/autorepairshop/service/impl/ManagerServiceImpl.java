@@ -9,6 +9,7 @@ import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseD
 import ru.unn.autorepairshop.domain.dto.response.AppointmentShortInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoShortResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ManagerViewResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.MechanicListResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.PartOrderListResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.PartOrderResponseDto;
 import ru.unn.autorepairshop.domain.entity.Appointment;
@@ -18,6 +19,7 @@ import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentManagerInfoRes
 import ru.unn.autorepairshop.domain.mapper.partorder.PartOrderResponseDtoMapper;
 import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ManagerService;
+import ru.unn.autorepairshop.service.MechanicService;
 import ru.unn.autorepairshop.service.PartOrderService;
 
 import java.time.format.DateTimeFormatter;
@@ -31,6 +33,8 @@ public class ManagerServiceImpl implements ManagerService {
     private final AppointmentService appointmentService;
 
     private final PartOrderService partOrderService;
+
+    private final MechanicService mechanicService;
 
     private final AppointmentManagerInfoResponseDtoMapper appointmentManagerInfoResponseDtoMapper;
 
@@ -50,6 +54,12 @@ public class ManagerServiceImpl implements ManagerService {
     public ManagerViewResponseDto getAppointment(Long id) {
         Appointment appointment = appointmentService.findById(id);
         return mapToManagerViewResponseDto(appointment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MechanicListResponseDto getAllMechanics() {
+        return mechanicService.getAllMechanics();
     }
 
     private ManagerViewResponseDto mapToManagerViewResponseDto(Appointment appointment) {
