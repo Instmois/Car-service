@@ -83,7 +83,7 @@ public class Appointment {
             mappedBy = "appointment",
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
     )
-    @JoinColumn(name = "schedule_id")
+    @ToString.Exclude
     private Schedule schedule;
 
     @OneToMany(

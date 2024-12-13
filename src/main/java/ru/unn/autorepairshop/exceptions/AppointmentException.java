@@ -12,6 +12,12 @@ public class AppointmentException extends RuntimeException {
 
         SIMILAR_WORKS_EXIST("Уже выполняются подобные работы"),
 
+        APPOINTMENT_IS_NOT_EXIST("Нет заявки с таким id"),
+
+        WRONG_DATE("Устанавливаемая дата не прошла валидацию"),
+
+        MECHANIC_IS_NOT_ASSIGNED("Сначала установите мастера"),
+
         CAR_IS_ALREADY_OCCUPIED("Это машина принадлежит другому пользователю");
 
         final String codeDescription;

@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 @Schema(description = "DTO ответа для заказа на запчасть")
 public record PartOrderResponseDto(
 
+        @Schema(description = "Id запчасти", example = "123")
+        Long id,
+
         @Schema(description = "Название запчасти", example = "ENGINE_OIL")
         PartName partName,
 

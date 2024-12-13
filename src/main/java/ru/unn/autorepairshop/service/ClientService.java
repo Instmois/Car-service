@@ -5,8 +5,8 @@ import org.springframework.data.domain.Pageable;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAllInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
@@ -60,16 +60,16 @@ public interface ClientService {
     /**
      * Получает все записи на приём для пользователя по его email с пагинацией.
      * <p>
-     * Этот метод возвращает страницу объектов типа {@link AppointmentResponseDto},
+     * Этот метод возвращает страницу объектов типа {@link AppointmentAllInfoResponseDto},
      * преобразованных из объектов {@link Appointment} для пользователя с указанным email.
      * Пагинация осуществляется через параметр {@link Pageable}.
      *
      * @param of    объект {@link Pageable}, содержащий информацию о странице
      *              (например, номер страницы и количество элементов на странице).
      * @param email email пользователя, для которого необходимо получить записи на приём.
-     * @return {@link Page} объектов {@link AppointmentResponseDto}, содержащих записи на приём.
+     * @return {@link Page} объектов {@link AppointmentAllInfoResponseDto}, содержащих записи на приём.
      */
-    Page<AppointmentResponseDto> getAllAppointments(Pageable of, String email);
+    Page<AppointmentAllInfoResponseDto> getAllAppointments(Pageable of, String email);
 
     /**
      * Получает список всех занятых дат для расписания.

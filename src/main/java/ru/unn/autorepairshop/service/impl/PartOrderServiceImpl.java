@@ -26,4 +26,10 @@ public class PartOrderServiceImpl implements PartOrderService {
         return new PageImpl<>(result, pageable, result.size());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<PartOrder> findAllByAppointmentId(Long appointmentId) {
+        return partOrderRepository.findAllByAppointment_Id(appointmentId);
+    }
+
 }

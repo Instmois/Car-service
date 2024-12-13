@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentCreateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAllInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
@@ -38,7 +38,7 @@ public interface ClientApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = AppointmentResponseDto.class)
+                                    schema = @Schema(implementation = AppointmentAllInfoResponseDto.class)
                             )
                     }
             ),
@@ -65,7 +65,7 @@ public interface ClientApi {
     })
     @Operation(summary = "Получение всех заявок пользователя")
     @GetMapping("/appointments")
-    Page<AppointmentResponseDto> getAllAppointments(Principal principal, Pageable pageable);
+    Page<AppointmentAllInfoResponseDto> getAllAppointments(Principal principal, Pageable pageable);
 
     @ApiResponses(value = {
             @ApiResponse(

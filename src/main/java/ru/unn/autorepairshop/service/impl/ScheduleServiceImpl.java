@@ -3,6 +3,7 @@ package ru.unn.autorepairshop.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.unn.autorepairshop.domain.entity.Schedule;
 import ru.unn.autorepairshop.repository.ScheduleRepository;
 import ru.unn.autorepairshop.service.ScheduleService;
 
@@ -20,6 +21,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional(readOnly = true)
     public List<LocalDateTime> getAllBusyTimes() {
         return scheduleRepository.findAllOccupiedStartDates();
+    }
+
+    @Override
+    public Schedule save(Schedule schedule) {
+        return scheduleRepository.saveAndFlush(schedule);
     }
 
 }

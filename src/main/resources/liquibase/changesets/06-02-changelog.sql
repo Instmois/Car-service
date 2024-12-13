@@ -47,19 +47,19 @@ VALUES ('2024-11-08 10:00:00', '2024-11-08 14:00:00', 4, 2);
 
 -- changeset user:1730897093924-27
 -- Добавление заявок
-INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type, schedule_id)
-VALUES ('NEW', '2024-11-06 10:00:00', 1, 1, 'REPAIR', NULL);
-INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type, schedule_id)
-VALUES ('AT_WORK', '2024-11-07 14:00:00', 2, 2, 'DIAGNOSTIC', 1);
-INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type, schedule_id)
-VALUES ('DONE', '2024-11-07 16:00:00', 2, 3, 'DIAGNOSTIC', 2);
+INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type)
+VALUES ('NEW', '2024-11-06 10:00:00', 1, 1, 'REPAIR');
+INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type)
+VALUES ('AT_WORK', '2024-11-07 14:00:00', 2, 2, 'DIAGNOSTIC');
+INSERT INTO appointment (status, appointment_date, client_id, vehicle_id, service_type)
+VALUES ('DONE', '2024-11-07 16:00:00', 2, 3, 'DIAGNOSTIC');
 
 -- changeset user:1730897093924-28
 -- Обновление расписания с назначением на заявки
 UPDATE schedule
-SET appointment_id = 1
+SET appointment_id = 2
 WHERE schedule_id = 1;
 UPDATE schedule
-SET appointment_id = 2
+SET appointment_id = 3
 WHERE schedule_id = 2;
 
