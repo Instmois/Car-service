@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.unn.autorepairshop.domain.dto.request.AppointmentAddedDateRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedDateResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedMechanicResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentShortInfoResponseDto;
@@ -21,6 +23,7 @@ import ru.unn.autorepairshop.domain.entity.User;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentManagerInfoResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.partorder.PartOrderResponseDtoMapper;
+import ru.unn.autorepairshop.exceptions.AppointmentException;
 import ru.unn.autorepairshop.service.AppointmentService;
 import ru.unn.autorepairshop.service.ManagerService;
 import ru.unn.autorepairshop.service.MechanicService;
@@ -88,17 +91,80 @@ public class ManagerServiceImpl implements ManagerService {
         schedule.setClient(manager);
         schedule.setAppointment(appointment);
 
-        if (appointment.getStatus().equals(AppointmentStatus.NEW)
-                && schedule.getStartDate() != null
-                && schedule.getEndDate() != null) {
-            appointment.setStatus(AppointmentStatus.AT_WORK);
-        }
+        checkStatus(appointment, schedule);
 
         scheduleService.save(schedule);
         appointment.setSchedule(schedule);
         appointmentService.save(appointment);
 
         return new AppointmentAddedMechanicResponseDto(appointmentId, masterId);
+    }
+
+    @Override
+    public AppointmentAddedDateResponseDto changeStartDate(
+            String email,
+            Long appointmentId,
+            AppointmentAddedDateRequestDto request
+    ) {
+        Appointment appointment = appointmentService.findById(appointmentId);
+        User manager = userService.getByEmail(email);
+        Schedule schedule = appointment.getSchedule();
+
+        if (schedule == null) {
+            throw AppointmentException.CODE.MECHANIC_IS_NOT_ASSIGNED.get();
+        }
+
+        if (schedule.getEndDate() != null && schedule.getEndDate().isBefore(request.appointmentDate())) {
+            throw AppointmentException.CODE.WRONG_DATE.get();
+        }
+
+        schedule.setStartDate(request.appointmentDate());
+        return getAppointmentAddedDateResponseDto(appointmentId, request, appointment, manager, schedule);
+    }
+
+    @Override
+    public AppointmentAddedDateResponseDto changeEndDate(String email, Long appointmentId, AppointmentAddedDateRequestDto request) {
+        Appointment appointment = appointmentService.findById(appointmentId);
+        User manager = userService.getByEmail(email);
+        Schedule schedule = appointment.getSchedule();
+
+        if (schedule == null) {
+            throw AppointmentException.CODE.MECHANIC_IS_NOT_ASSIGNED.get();
+        }
+
+        if (schedule.getStartDate() != null && schedule.getStartDate().isAfter(request.appointmentDate())) {
+            throw AppointmentException.CODE.WRONG_DATE.get();
+        }
+
+        schedule.setEndDate(request.appointmentDate());
+        return getAppointmentAddedDateResponseDto(appointmentId, request, appointment, manager, schedule);
+    }
+
+    private AppointmentAddedDateResponseDto getAppointmentAddedDateResponseDto(
+            Long appointmentId,
+            AppointmentAddedDateRequestDto request,
+            Appointment appointment,
+            User manager,
+            Schedule schedule
+    ) {
+        schedule.setClient(manager);
+        schedule.setAppointment(appointment);
+
+        checkStatus(appointment, schedule);
+
+        scheduleService.save(schedule);
+        appointment.setSchedule(schedule);
+        appointmentService.save(appointment);
+
+        return new AppointmentAddedDateResponseDto(appointmentId, request.appointmentDate().format(DATE_TIME_FORMATTER));
+    }
+
+    private static void checkStatus(Appointment appointment, Schedule schedule) {
+        if (appointment.getStatus().equals(AppointmentStatus.NEW)
+                && schedule.getStartDate() != null
+                && schedule.getEndDate() != null) {
+            appointment.setStatus(AppointmentStatus.AT_WORK);
+        }
     }
 
 

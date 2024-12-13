@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.unn.autorepairshop.controller.api.ManagerApi;
+import ru.unn.autorepairshop.domain.dto.request.AppointmentAddedDateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentGetAllRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedDateResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedMechanicResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ManagerViewResponseDto;
@@ -68,6 +70,28 @@ public class ManagerController implements ManagerApi {
             @PathVariable Long masterId
     ) {
         return managerService.addMechanicToAppointment(principal.getName(), appointmentId, masterId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PutMapping("/appointment/{appointmentId}/startDate")
+    public AppointmentAddedDateResponseDto addStartDateToAppointment(
+            Principal principal,
+            @PathVariable Long appointmentId,
+            AppointmentAddedDateRequestDto request
+    ) {
+        return managerService.changeStartDate(principal.getName(), appointmentId, request);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PutMapping("/appointment/{appointmentId}/endDate")
+    public AppointmentAddedDateResponseDto addEndDateToAppointment(
+            Principal principal,
+            @PathVariable Long appointmentId,
+            AppointmentAddedDateRequestDto request
+    ) {
+        return managerService.changeEndDate(principal.getName(), appointmentId, request);
     }
 
 }

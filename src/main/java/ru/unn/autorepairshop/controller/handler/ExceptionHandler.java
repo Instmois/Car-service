@@ -189,7 +189,10 @@ public class ExceptionHandler {
     public ResponseEntity<ErrorMessage> handleAppointmentException(AppointmentException e) {
         AppointmentException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
-            case REPETITION_OF_SERVICE_TYPES, SIMILAR_WORKS_EXIST -> HttpStatus.BAD_REQUEST;
+            case REPETITION_OF_SERVICE_TYPES,
+                 SIMILAR_WORKS_EXIST,
+                 WRONG_DATE,
+                 MECHANIC_IS_NOT_ASSIGNED -> HttpStatus.BAD_REQUEST;
             case APPOINTMENT_IS_NOT_EXIST -> HttpStatus.NOT_FOUND;
             case CAR_IS_ALREADY_OCCUPIED -> FORBIDDEN;
         };

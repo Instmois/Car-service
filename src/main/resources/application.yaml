@@ -35,7 +35,7 @@ security:
   jwt:
     access:
       secret: ${JWT_ACCESS_SECRET}
-      time: 5
+      time: 50
     refresh:
       secret: ${JWT_REFRESH_SECRET}
       time: 30
