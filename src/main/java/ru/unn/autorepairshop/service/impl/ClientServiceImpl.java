@@ -10,6 +10,7 @@ import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentAllInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentDateResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
@@ -151,31 +152,41 @@ public class ClientServiceImpl implements ClientService {
         return null;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public AppointmentDateResponseDto getAppointmentDate(Long id) {
+        return new AppointmentDateResponseDto(
+                appointmentService
+                        .findById(id).getAppointmentDate().format(DATE_TIME_FORMATTER)
+        );
+    }
+
     /**
-     * Преобразует Appointment в AppointmentResponseDto в зависимости от статуса заявки.
+     * Преобразует Appointment в AppointmentResponseDto.
      */
     private AppointmentAllInfoResponseDto mapAppointmentToDto(Appointment appointment) {
-        if (appointment.getStatus() == AppointmentStatus.NEW) {
-            return new AppointmentAllInfoResponseDto(
-                    DEFAULT_FIELD_STATUS,
-                    DEFAULT_FIELD_STATUS,
-                    appointment.getServiceType(),
-                    appointment.getVehicle().getModel(),
-                    appointment.getVehicle().getLicensePlate(),
-                    DEFAULT_FIELD_STATUS,
-                    appointment.getStatus()
-            );
-        } else {
-            return new AppointmentAllInfoResponseDto(
-                    appointment.getSchedule().getStartDate().format(DATE_TIME_FORMATTER),
-                    appointment.getSchedule().getEndDate().format(DATE_TIME_FORMATTER),
-                    appointment.getServiceType(),
-                    appointment.getVehicle().getModel(),
-                    appointment.getVehicle().getLicensePlate(),
-                    appointment.getSchedule().getMechanic().getInitials(),
-                    appointment.getStatus()
-            );
-        }
+        return new AppointmentAllInfoResponseDto(
+                appointment.getId(),
+                appointment.getSchedule() != null
+                        ? appointment.getSchedule().getStartDate() != null
+                        ? appointment.getSchedule().getStartDate().format(DATE_TIME_FORMATTER)
+                        : DEFAULT_FIELD_STATUS
+                        : DEFAULT_FIELD_STATUS,
+                appointment.getSchedule() != null
+                        ? appointment.getSchedule().getEndDate() != null
+                        ? appointment.getSchedule().getEndDate().format(DATE_TIME_FORMATTER)
+                        : DEFAULT_FIELD_STATUS
+                        : DEFAULT_FIELD_STATUS,
+                appointment.getServiceType(),
+                appointment.getVehicle().getModel(),
+                appointment.getVehicle().getLicensePlate(),
+                appointment.getSchedule() != null
+                        ? appointment.getSchedule().getMechanic() != null
+                        ? appointment.getSchedule().getMechanic().getInitials()
+                        : DEFAULT_FIELD_STATUS
+                        : DEFAULT_FIELD_STATUS,
+                appointment.getStatus()
+        );
     }
 
 

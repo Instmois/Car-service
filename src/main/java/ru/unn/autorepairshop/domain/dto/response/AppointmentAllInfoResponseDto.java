@@ -7,6 +7,9 @@ import ru.unn.autorepairshop.domain.enums.ServiceType;
 @Schema(description = "Информация о записи")
 public record AppointmentAllInfoResponseDto(
 
+        @Schema(description = "Id заявки", example = "123")
+        Long id,
+
         @Schema(description = "Дата и время начала записи", example = "2024-11-06T10:00:00")
         String startDate,
 

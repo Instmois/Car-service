@@ -7,6 +7,7 @@ import ru.unn.autorepairshop.domain.dto.request.ClientInfoUpdateRequestDto;
 import ru.unn.autorepairshop.domain.dto.request.ClientUpdatePasswordRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentAllInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.AppointmentCreatedResponseDto;
+import ru.unn.autorepairshop.domain.dto.response.AppointmentDateResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.BusyDaysResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoResponseDto;
 import ru.unn.autorepairshop.domain.dto.response.ClientInfoUpdateResponseDto;
@@ -83,4 +84,7 @@ public interface ClientService {
     Page<PartOrderResponseDto> getAllPartOrders(Pageable pageable, String name);
 
     Void updatePassword(ClientUpdatePasswordRequestDto request, String email);
+
+    AppointmentDateResponseDto getAppointmentDate(Long id);
+
 }
