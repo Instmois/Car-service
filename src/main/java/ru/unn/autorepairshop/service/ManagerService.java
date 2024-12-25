@@ -3,11 +3,8 @@ package ru.unn.autorepairshop.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentAddedDateRequestDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedDateResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedMechanicResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.ManagerViewResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.MechanicListResponseDto;
+import ru.unn.autorepairshop.domain.dto.request.PartOrderCreateRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.*;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 
 public interface ManagerService {
@@ -23,5 +20,15 @@ public interface ManagerService {
     AppointmentAddedDateResponseDto changeStartDate(String email, Long appointmentId, AppointmentAddedDateRequestDto request);
 
     AppointmentAddedDateResponseDto changeEndDate(String email, Long appointmentId, AppointmentAddedDateRequestDto request);
+
+    PartOrderResponseDto addPartOrderToAppointment(Long appointmentId, PartOrderCreateRequestDto request);
+
+    void deleteAppointment(Long appointmentId);
+
+    void deletePartOrder(Long orderId);
+
+    PartOrderResponseDto switchStatusForOrder(Long orderId);
+
+    AppointmentSwitchedStatusResponseDto switchStatusForAppointment(Long appointmentId);
 
 }

@@ -1,6 +1,7 @@
 package ru.unn.autorepairshop.domain.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ public record AppointmentAddedDateRequestDto(
                 example = "2024-11-01T14:30:00"
         )
         @NotNull(message = "Дата записи не может быть null.")
+        @Future(message = "Дата записи должна быть в будущем")
         LocalDateTime appointmentDate
 
 ) {

@@ -32,4 +32,24 @@ public class PartOrderServiceImpl implements PartOrderService {
         return partOrderRepository.findAllByAppointment_Id(appointmentId);
     }
 
+    @Override
+    public void save(PartOrder partOrder) {
+        partOrderRepository.save(partOrder);
+    }
+
+    @Override
+    public void delete(Long orderId) {
+        partOrderRepository.delete(this.getById(orderId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PartOrder findById(Long orderId) {
+        return this.getById(orderId);
+    }
+
+    private PartOrder getById(Long orderId) {
+        return partOrderRepository.findById(orderId).orElseThrow();
+    }
+
 }

@@ -20,4 +20,6 @@ public interface AppointmentService {
 
     Page<Appointment> findAllWithFilter(String client, AppointmentStatus statusFilter, PageRequest of);
 
+    void delete(Long appointmentId);
+
 }

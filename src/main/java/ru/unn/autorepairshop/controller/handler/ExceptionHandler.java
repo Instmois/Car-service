@@ -50,9 +50,9 @@ public class ExceptionHandler {
         HttpStatus status = switch (code) {
             case JWT_VALIDATION_ERROR -> HttpStatus.UNAUTHORIZED;
             case INVALID_REPEAT_PASSWORD,
-                 REFRESH_TOKEN_IS_NULL,
-                 INVALID_OLD_PASSWORD,
-                 OLD_PASSWORD_EQUALS_TO_NEW_PASSWORD -> HttpStatus.BAD_REQUEST;
+                    REFRESH_TOKEN_IS_NULL,
+                    INVALID_OLD_PASSWORD,
+                    OLD_PASSWORD_EQUALS_TO_NEW_PASSWORD -> HttpStatus.BAD_REQUEST;
             case EMAIL_IN_USE -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
@@ -190,9 +190,12 @@ public class ExceptionHandler {
         AppointmentException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case REPETITION_OF_SERVICE_TYPES,
-                 SIMILAR_WORKS_EXIST,
-                 WRONG_DATE,
-                 MECHANIC_IS_NOT_ASSIGNED -> HttpStatus.BAD_REQUEST;
+                    SIMILAR_WORKS_EXIST,
+                    WRONG_DATE,
+                    APPOINTMENT_IS_NOT_IN_PROGRESS,
+                    PART_ORDERS_IS_NOT_DELIVERED,
+                    APPOINTMENT_IS_DONE,
+                    MECHANIC_IS_NOT_ASSIGNED -> HttpStatus.BAD_REQUEST;
             case APPOINTMENT_IS_NOT_EXIST -> HttpStatus.NOT_FOUND;
             case CAR_IS_ALREADY_OCCUPIED -> FORBIDDEN;
         };

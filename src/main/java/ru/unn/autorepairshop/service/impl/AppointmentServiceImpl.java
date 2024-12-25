@@ -55,4 +55,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         return new PageImpl<>(result, of, result.size());
     }
 
+    @Override
+    public void delete(Long appointmentId) {
+        appointmentRepository.delete(this.findById(appointmentId));
+    }
+
 }

@@ -6,21 +6,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentAddedDateRequestDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedDateResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentAddedMechanicResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentManagerInfoResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.AppointmentShortInfoResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.ClientInfoShortResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.ManagerViewResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.MechanicListResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.PartOrderListResponseDto;
-import ru.unn.autorepairshop.domain.dto.response.PartOrderResponseDto;
+import ru.unn.autorepairshop.domain.dto.request.PartOrderCreateRequestDto;
+import ru.unn.autorepairshop.domain.dto.response.*;
 import ru.unn.autorepairshop.domain.entity.Appointment;
 import ru.unn.autorepairshop.domain.entity.Mechanic;
 import ru.unn.autorepairshop.domain.entity.PartOrder;
 import ru.unn.autorepairshop.domain.entity.Schedule;
 import ru.unn.autorepairshop.domain.entity.User;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
+import ru.unn.autorepairshop.domain.enums.PartName;
+import ru.unn.autorepairshop.domain.enums.PartOrderStatus;
 import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentManagerInfoResponseDtoMapper;
 import ru.unn.autorepairshop.domain.mapper.partorder.PartOrderResponseDtoMapper;
 import ru.unn.autorepairshop.exceptions.AppointmentException;
@@ -31,6 +26,7 @@ import ru.unn.autorepairshop.service.PartOrderService;
 import ru.unn.autorepairshop.service.ScheduleService;
 import ru.unn.autorepairshop.service.UserService;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -138,6 +134,70 @@ public class ManagerServiceImpl implements ManagerService {
 
         schedule.setEndDate(request.appointmentDate());
         return getAppointmentAddedDateResponseDto(appointmentId, request, appointment, manager, schedule);
+    }
+
+    @Override
+    public PartOrderResponseDto addPartOrderToAppointment(Long appointmentId, PartOrderCreateRequestDto request) {
+        Appointment appointment = appointmentService.findById(appointmentId);
+
+        if (appointment.getStatus().equals(AppointmentStatus.DONE)) {
+            throw AppointmentException.CODE.APPOINTMENT_IS_DONE.get();
+        }
+
+        PartOrder partOrder = new PartOrder();
+        partOrder.setAppointment(appointment);
+        partOrder.setPartName(PartName.valueOf(request.partName()));
+        partOrder.setOrderDate(LocalDateTime.now());
+        partOrder.setStatus(PartOrderStatus.ON_THE_WAY);
+        partOrder.setAmount(request.amount());
+        partOrder.setPrice(request.price());
+        partOrder.setDeliveryDate(request.appointmentDate());
+
+        appointment.getPartOrders().add(partOrder);
+        appointmentService.save(appointment);
+        partOrderService.save(partOrder);
+
+        return partOrderResponseDtoMapper.mapPartOrderToDto(partOrder);
+    }
+
+    @Override
+    public void deleteAppointment(Long appointmentId) {
+        appointmentService.delete(appointmentId);
+    }
+
+    @Override
+    public void deletePartOrder(Long orderId) {
+        partOrderService.delete(orderId);
+    }
+
+    @Override
+    public PartOrderResponseDto switchStatusForOrder(Long orderId) {
+        PartOrder partOrder = partOrderService.findById(orderId);
+        partOrder.setStatus(PartOrderStatus.DELIVERED);
+        return partOrderResponseDtoMapper.mapPartOrderToDto(partOrder);
+    }
+
+    @Override
+    public AppointmentSwitchedStatusResponseDto switchStatusForAppointment(Long appointmentId) {
+        Appointment appointment = appointmentService.findById(appointmentId);
+
+        if (appointment.getStatus().equals(AppointmentStatus.DONE)) {
+            throw AppointmentException.CODE.APPOINTMENT_IS_NOT_IN_PROGRESS.get();
+        }
+
+        List<PartOrder> orders = appointment.getPartOrders();
+
+        orders.stream()
+                .filter(order -> !order.getStatus().equals(PartOrderStatus.DELIVERED))
+                .findAny()
+                .ifPresent(order -> {
+                    throw AppointmentException.CODE.PART_ORDERS_IS_NOT_DELIVERED.get();
+                });
+
+        appointment.setStatus(AppointmentStatus.DONE);
+        appointmentService.save(appointment);
+
+        return new AppointmentSwitchedStatusResponseDto(appointmentId, AppointmentStatus.DONE.toString());
     }
 
     private AppointmentAddedDateResponseDto getAppointmentAddedDateResponseDto(
