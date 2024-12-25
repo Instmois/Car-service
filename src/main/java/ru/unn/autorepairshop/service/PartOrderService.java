@@ -12,4 +12,10 @@ public interface PartOrderService {
 
     List<PartOrder> findAllByAppointmentId(Long appointmentId);
 
+    void save(PartOrder partOrder);
+
+    void delete(Long orderId);
+
+    PartOrder findById(Long orderId);
+
 }

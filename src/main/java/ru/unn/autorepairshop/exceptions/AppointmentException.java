@@ -14,6 +14,12 @@ public class AppointmentException extends RuntimeException {
 
         APPOINTMENT_IS_NOT_EXIST("Нет заявки с таким id"),
 
+        APPOINTMENT_IS_DONE("Заявка уже выполнена"),
+
+        APPOINTMENT_IS_NOT_IN_PROGRESS("Заявка еще не выполняется"),
+
+        PART_ORDERS_IS_NOT_DELIVERED("Заказанные детали еще не доставлены"),
+
         WRONG_DATE("Устанавливаемая дата не прошла валидацию"),
 
         MECHANIC_IS_NOT_ASSIGNED("Сначала установите мастера"),
