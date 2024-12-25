@@ -221,7 +221,7 @@ public class AuthControllerTest {
         mockMvc.perform(post(PATH + "/refresh")
                         .with(csrf())
                         .contentType(CONTENT_TYPE)
-                        .content(objectMapper.writeValueAsString(jwtRequest)))
+                        .content(objectMapper.writeValueAsString(jwtRefreshRequest)))
                 .andExpect(status().isNotFound());
     }
     //The end of login method tests
