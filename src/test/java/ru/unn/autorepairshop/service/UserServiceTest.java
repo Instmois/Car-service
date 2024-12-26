@@ -49,7 +49,6 @@ public class UserServiceTest {
     private static final String DEFAULT_NUMBER = "88005553535";
     private static final String DEFAULT_EMAIL = "test@example.com";
     private static final String DEFAULT_PASSWORD = "password";
-    private static final String ENCODED_PASSWORD = "encoded_password";
     private static final Long DEFAULT_USER_ID = 1L;
     private static final String DEFAULT_LICENSE_PLATE = "A000AA";
 
@@ -59,7 +58,7 @@ public class UserServiceTest {
     void setUp() {
         AuthData authData = new AuthData();
         authData.setEmail(DEFAULT_EMAIL);
-        authData.setPassword(ENCODED_PASSWORD);
+        authData.setPassword(DEFAULT_PASSWORD);
         authData.setRole(Role.ROLE_CLIENT);
 
         user = new User();
@@ -125,7 +124,6 @@ public class UserServiceTest {
         );
 
         when(userCreateRequestDtoMapper.toEntity(request)).thenReturn(user);
-        when(passwordEncoder.encode(DEFAULT_PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(userRepository.findByAuthData_Email(DEFAULT_EMAIL)).thenReturn(Optional.empty());
         when(userRepository.save(user)).thenReturn(user);
         when(userCreateResponseDtoMapper.toDto(user)).thenReturn(responseDto);
