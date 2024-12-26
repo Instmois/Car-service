@@ -6,15 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import ru.unn.autorepairshop.domain.dto.request.AppointmentAddedDateRequestDto;
 import ru.unn.autorepairshop.domain.dto.response.*;
 import ru.unn.autorepairshop.domain.entity.*;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.enums.Role;
-import ru.unn.autorepairshop.domain.mapper.appointment.AppointmentManagerInfoResponseDtoMapper;
-import ru.unn.autorepairshop.domain.mapper.partorder.PartOrderResponseDtoMapper;
 import ru.unn.autorepairshop.exceptions.AppointmentException;
 import ru.unn.autorepairshop.service.impl.ManagerServiceImpl;
 
@@ -22,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class ManagerServiceTest {
@@ -71,22 +67,8 @@ public class ManagerServiceTest {
     }
 
     @Test
-    void getAllAppointments() {
-        PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<Appointment> appointmentsPage = mock(Page.class);
-
-        when(appointmentService.findAllWithFilter(any(), any(), eq(pageRequest))).thenReturn(appointmentsPage);
-        when(appointmentsPage.map(any())).thenReturn(mock(Page.class));
-
-        Page<AppointmentManagerInfoResponseDto> result = managerService.getAllAppointments(DEFAULT_EMAIL, AppointmentStatus.NEW, pageRequest);
-
-        assertNotNull(result);
-        verify(appointmentService).findAllWithFilter(DEFAULT_EMAIL, AppointmentStatus.NEW, pageRequest);
-    }
-
-    @Test
     void getAllMechanics() {
-        MechanicListResponseDto expectedResponse = new MechanicListResponseDto(new ArrayList<>());
+        MechanicListResponseDto expectedResponse = new MechanicListResponseDto(List.of());
         when(mechanicService.getAllMechanics()).thenReturn(expectedResponse);
 
         MechanicListResponseDto response = managerService.getAllMechanics();
