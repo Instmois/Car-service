@@ -20,4 +20,7 @@ public interface UserService {
     User save(User user);
 
     Optional<User> getOptionalByEmail(String email);
+
+    List<User> getAll();
+
 }
