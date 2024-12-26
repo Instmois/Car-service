@@ -11,4 +11,6 @@ public interface ScheduleService {
 
     Schedule save(Schedule schedule);
 
+    void delete(Schedule schedule);
+
 }
