@@ -12,7 +12,11 @@ public class UserException extends RuntimeException {
 
         NO_SUCH_USER_EMAIL("Нет пользователя с таким email"),
 
-        EMAIL_IN_USE("Такой email уже используется");
+        EMAIL_IN_USE("Такой email уже используется"),
+
+        USER_IS_NOT_A_MANAGER("У пользователя нет роли менеджера"),
+
+        USER_IS_NOT_A_CLIENT("У пользователя нет роли клиента");
 
         final String codeDescription;
 

@@ -165,6 +165,7 @@ public class ExceptionHandler {
         UserException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_USER_ID, NO_SUCH_USER_EMAIL -> HttpStatus.NOT_FOUND;
+            case USER_IS_NOT_A_CLIENT, USER_IS_NOT_A_MANAGER -> HttpStatus.BAD_REQUEST;
             case EMAIL_IN_USE -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
