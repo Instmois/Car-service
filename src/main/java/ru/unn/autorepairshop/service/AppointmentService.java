@@ -22,4 +22,6 @@ public interface AppointmentService {
 
     void delete(Long appointmentId);
 
+    void saveAndFlush(Appointment appointment);
+
 }

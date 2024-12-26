@@ -70,7 +70,7 @@ public class ManagerController implements ManagerApi {
     public AppointmentAddedDateResponseDto addStartDateToAppointment(
             Principal principal,
             @PathVariable Long appointmentId,
-            @Valid AppointmentAddedDateRequestDto request
+            @Valid @RequestBody AppointmentAddedDateRequestDto request
     ) {
         return managerService.changeStartDate(principal.getName(), appointmentId, request);
     }
@@ -81,7 +81,7 @@ public class ManagerController implements ManagerApi {
     public AppointmentAddedDateResponseDto addEndDateToAppointment(
             Principal principal,
             @PathVariable Long appointmentId,
-            @Valid AppointmentAddedDateRequestDto request
+            @Valid @RequestBody AppointmentAddedDateRequestDto request
     ) {
         return managerService.changeEndDate(principal.getName(), appointmentId, request);
     }

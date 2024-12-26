@@ -154,7 +154,6 @@ public class ManagerServiceImpl implements ManagerService {
         partOrder.setDeliveryDate(request.appointmentDate());
 
         appointment.getPartOrders().add(partOrder);
-        appointmentService.save(appointment);
         partOrderService.save(partOrder);
 
         return partOrderResponseDtoMapper.mapPartOrderToDto(partOrder);
@@ -162,6 +161,14 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void deleteAppointment(Long appointmentId) {
+        Appointment appointment = appointmentService.findById(appointmentId);
+
+        if (appointment.getSchedule() != null) {
+            Schedule schedule = appointment.getSchedule();
+            schedule.setMechanic(null);
+            scheduleService.delete(schedule);
+        }
+
         appointmentService.delete(appointmentId);
     }
 

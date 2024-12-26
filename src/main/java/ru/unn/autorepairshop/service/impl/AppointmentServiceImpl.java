@@ -60,4 +60,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.delete(this.findById(appointmentId));
     }
 
+    @Override
+    public void saveAndFlush(Appointment appointment) {
+        appointmentRepository.saveAndFlush(appointment);
+    }
+
 }

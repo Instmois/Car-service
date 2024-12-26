@@ -28,4 +28,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.saveAndFlush(schedule);
     }
 
+    @Override
+    public void delete(Schedule schedule) {
+        scheduleRepository.delete(schedule);
+    }
+
 }
