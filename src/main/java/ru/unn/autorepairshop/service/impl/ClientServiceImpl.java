@@ -81,6 +81,7 @@ public class ClientServiceImpl implements ClientService {
                 .serviceType(request.serviceType())
                 .build());
 
+        // save called 2 times?
         appointmentService.save(appointment);
 
         return appointmentCreatedResponseDtoMapper.toDto(appointment);
