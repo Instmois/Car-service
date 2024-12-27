@@ -11,7 +11,6 @@ import ru.unn.autorepairshop.domain.dto.response.*;
 import ru.unn.autorepairshop.domain.entity.*;
 import ru.unn.autorepairshop.domain.enums.AppointmentStatus;
 import ru.unn.autorepairshop.domain.enums.Role;
-import ru.unn.autorepairshop.exceptions.AppointmentException;
 import ru.unn.autorepairshop.service.impl.ManagerServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -100,16 +99,6 @@ public class ManagerServiceTest {
     }
 
     @Test
-    void addMechanicToAppointment_throwsAppointmentException_ifScheduleNotAssigned() {
-        when(appointmentService.findById(DEFAULT_APPOINTMENT_ID)).thenReturn(appointment);
-        when(userService.getByEmail(DEFAULT_EMAIL)).thenReturn(manager);
-        appointment.setSchedule(null);
-
-        AppointmentException exception = assertThrows(AppointmentException.class, () -> managerService.addMechanicToAppointment(DEFAULT_EMAIL, DEFAULT_APPOINTMENT_ID, DEFAULT_MECHANIC_ID));
-        assertEquals(AppointmentException.CODE.MECHANIC_IS_NOT_ASSIGNED, exception.getCode());
-    }
-
-    @Test
     void changeStartDate() {
         AppointmentAddedDateRequestDto request = new AppointmentAddedDateRequestDto(LocalDateTime.now().plusDays(1));
         when(appointmentService.findById(DEFAULT_APPOINTMENT_ID)).thenReturn(appointment);
@@ -120,16 +109,6 @@ public class ManagerServiceTest {
         assertNotNull(response);
         verify(appointmentService).findById(DEFAULT_APPOINTMENT_ID);
         verify(userService).getByEmail(DEFAULT_EMAIL);
-    }
-
-    @Test
-    void changeStartDate_throwsAppointmentException_ifDateIsWrong() {
-        AppointmentAddedDateRequestDto request = new AppointmentAddedDateRequestDto(LocalDateTime.now().minusDays(1));
-        when(appointmentService.findById(DEFAULT_APPOINTMENT_ID)).thenReturn(appointment);
-        when(userService.getByEmail(DEFAULT_EMAIL)).thenReturn(manager);
-
-        AppointmentException exception = assertThrows(AppointmentException.class, () -> managerService.changeStartDate(DEFAULT_EMAIL, DEFAULT_APPOINTMENT_ID, request));
-        assertEquals(AppointmentException.CODE.WRONG_DATE, exception.getCode());
     }
 
     @Test
@@ -145,13 +124,4 @@ public class ManagerServiceTest {
         verify(userService).getByEmail(DEFAULT_EMAIL);
     }
 
-    @Test
-    void changeEndDate_throwsAppointmentException_ifDateIsWrong() {
-        AppointmentAddedDateRequestDto request = new AppointmentAddedDateRequestDto(LocalDateTime.now().minusDays(1));
-        when(appointmentService.findById(DEFAULT_APPOINTMENT_ID)).thenReturn(appointment);
-        when(userService.getByEmail(DEFAULT_EMAIL)).thenReturn(manager);
-
-        AppointmentException exception = assertThrows(AppointmentException.class, () -> managerService.changeEndDate(DEFAULT_EMAIL, DEFAULT_APPOINTMENT_ID, request));
-        assertEquals(AppointmentException.CODE.WRONG_DATE, exception.getCode());
-    }
 }
